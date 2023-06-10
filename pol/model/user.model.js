@@ -8,6 +8,15 @@ const { Schema } = mongoose;
 
 
 const userSchema = new Schema({
+    names: {
+        type: String,
+        required: true,
+    },
+    phone: {
+        type: Number,
+        required: true,
+        unique: true
+    },
     email: {
         type: String,
         lowercase: true,
@@ -17,8 +26,11 @@ const userSchema = new Schema({
     password: {
         type: String,
         required: true
-    }
+    },
 });
+
+
+
 
 //hide password thingy here
 
