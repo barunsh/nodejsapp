@@ -11,7 +11,6 @@ class MyRegister extends StatefulWidget {
   @override
   _MyRegisterState createState() => _MyRegisterState();
 }
-
 class _MyRegisterState extends State<MyRegister> {
   TextEditingController _namesController = TextEditingController();
   TextEditingController _emailController = TextEditingController();
@@ -60,7 +59,7 @@ class _MyRegisterState extends State<MyRegister> {
     return Container(
       decoration: BoxDecoration(
         image: DecorationImage(
-            image: AssetImage('assets/register.png'), fit: BoxFit.cover),
+            image: AssetImage('./assets/register.png'), fit: BoxFit.cover),
       ),
       child: Scaffold(
         backgroundColor: Colors.transparent,

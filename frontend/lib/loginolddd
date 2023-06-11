@@ -1,11 +1,10 @@
 import 'dart:convert';
-import 'package:loginuicolors/dashboard.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:loginuicolors/dashboard.dart';
+import 'config.dart';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:loginuicolors/home.dart';
-import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
-import 'config.dart';
 
 class MyLogin extends StatefulWidget {
   const MyLogin({Key? key}) : super(key: key);
@@ -13,19 +12,16 @@ class MyLogin extends StatefulWidget {
   @override
   _MyLoginState createState() => _MyLoginState();
 }
-
 class _MyLoginState extends State<MyLogin> {
   bool isChecked = false;
-  TextEditingController emailController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
+  TextEditingController email = TextEditingController();
+  TextEditingController password = TextEditingController();
 
-  bool _isNotValidate =false;
+  late SharedPreferences prefs;
 
-late SharedPreferences prefs;
+  // late Box box1;
 
-@override
   void initState() {
-    // TODO: implement initState
     super.initState();
     initSharedPref();
   }
@@ -34,29 +30,38 @@ late SharedPreferences prefs;
     prefs = await SharedPreferences.getInstance();
   }
 
-  void loginUser() async{
-    if(emailController.text.isNotEmpty && passwordController.text.isNotEmpty){
-      var reqBody = {
-        "email" : emailController.text,
-        "password" : passwordController.text,
+  void loginUser() async {
+    if (email.text.isNotEmpty &&
+        password.text.isNotEmpty) {
+      // sending input to backend
+      var regBody = {
+        "email": email.text,
+        "password": password.text,
       };
 
-      var response = await http.post(Uri.parse(login),
-          headers: {"Content-type": "application/JSON"},
-          body: jsonEncode(reqBody)
-      );
+      var response = await http.post(Uri.parse(registration),
+          headers: {"Content-type": "application/json"},
+          body: jsonEncode(regBody));
 
       var jsonResponse = jsonDecode(response.body);
-      if(jsonResponse['status']){
+      if (jsonResponse['status']) {
         var myToken = jsonResponse['token'];
         prefs.setString('token', myToken);
-        Navigator.push(context, MaterialPageRoute(builder: (context)=>Dashboard(token:myToken)));
-      }
-      else{
-        print('Something went wrong');
+        Navigator.push(context, MaterialPageRoute(builder: (context)=>Dashboard(token: myToken)));
+      } else {
+        print('Something went wrong!');
       }
     }
   }
+
+  @override
+  // void initState() {
+  //   //
+  //   super.initState();
+  //   createBox();
+  //
+  // }
+
 
   @override
   Widget build(BuildContext context) {
@@ -80,7 +85,10 @@ late SharedPreferences prefs;
             SingleChildScrollView(
               child: Container(
                 padding: EdgeInsets.only(
-                    top: MediaQuery.of(context).size.height * 0.5),
+                    top: MediaQuery
+                        .of(context)
+                        .size
+                        .height * 0.5),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -89,7 +97,7 @@ late SharedPreferences prefs;
                       child: Column(
                         children: [
                           TextField(
-                            controller: emailController,
+                            controller: email,
                             style: TextStyle(color: Colors.black),
                             decoration: InputDecoration(
                                 fillColor: Colors.grey.shade100,
@@ -103,7 +111,7 @@ late SharedPreferences prefs;
                             height: 30,
                           ),
                           TextField(
-                            controller: passwordController,
+                            controller: password,
                             style: TextStyle(),
                             obscureText: true,
                             decoration: InputDecoration(
@@ -120,15 +128,15 @@ late SharedPreferences prefs;
                           Row(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              Text(
-                                "Remember Me",
-                                style: TextStyle(color: Colors.black),
-                              ),
+                              Text("Remember Me",
+                                style: TextStyle(color: Colors.black),),
                               Checkbox(
                                 value: isChecked,
                                 onChanged: (value) {
                                   isChecked = !isChecked;
-                                  setState(() {});
+                                  setState(() {
+
+                                  });
                                 },
                               ),
                             ],
@@ -146,7 +154,9 @@ late SharedPreferences prefs;
                                 backgroundColor: Color(0xff4c505b),
                                 child: IconButton(
                                     color: Colors.white,
-                                    onPressed: loginUser,
+                                    onPressed: () {
+                                      loginUser();
+                                    },
                                     icon: Icon(
                                       Icons.arrow_forward,
                                     )),
@@ -156,6 +166,8 @@ late SharedPreferences prefs;
                           SizedBox(
                             height: 40,
                           ),
+
+
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
