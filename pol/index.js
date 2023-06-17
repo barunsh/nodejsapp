@@ -1,12 +1,15 @@
 const app = require('./app');
 const db = require('./config/db');
-const UserModel = require('./model/user.model')
 const port = 3000;
 
-app.get('/', (req,res)=>{
-    res.send("Hello la");
-})
+// Connect to the database
+db.connect().then(() => {
+  console.log('Connected to MongoDB');
 
-app.listen(port, ()=>{
-    console.log(`server running on port http://localhost:${port}`);
+  // Start listening for incoming requests
+  app.listen(port, () => {
+    console.log(`Server running on http://localhost:${port}`);
+  });
+}).catch((error) => {
+  console.error('Error connecting to MongoDB', error);
 });

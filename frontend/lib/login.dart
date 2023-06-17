@@ -1,10 +1,11 @@
 import 'dart:convert';
+import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:loginuicolors/dashboard.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
-import 'package:loginuicolors/home.dart';
+// import 'package:loginuicolors/home.dart';
 import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
+
 import 'config.dart';
 
 class MyLogin extends StatefulWidget {
@@ -19,7 +20,7 @@ class _MyLoginState extends State<MyLogin> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
-  bool _isNotValidate =false;
+  // bool _isNotValidate =false;
 
 late SharedPreferences prefs;
 
@@ -47,16 +48,23 @@ late SharedPreferences prefs;
       );
 
       var jsonResponse = jsonDecode(response.body);
+      print("JSON response: $jsonResponse");
       if(jsonResponse['status']){
         var myToken = jsonResponse['token'];
+        var jwtDecodedToken = JwtDecoder.decode(myToken);
+        var userRole = jwtDecodedToken['role'];
         prefs.setString('token', myToken);
-        Navigator.push(context, MaterialPageRoute(builder: (context)=>Dashboard(token:myToken)));
+        Navigator.push(context, MaterialPageRoute(builder: (context)=>Dashboard(token:myToken, role: userRole)));
       }
-      else{
-        print('Something went wrong');
-      }
+      else {
+  print('Something went wrong');
+  print("Status Code: ${response.statusCode}");
+  print("Response JSON: $jsonResponse");
+}
     }
   }
+
+  
 
   @override
   Widget build(BuildContext context) {
