@@ -1,9 +1,25 @@
 const mongoose = require('mongoose');
+const UserModel = require('../model/user.model');  // Make sure the path to the UserModel is correct
 
-const connection = mongoose.createConnection('mongodb://localhost:27017/newToDo').on('open',()=>{
-    console.log("MongoDB connected");
-}).on('error', ()=> {
-    console.log("MongoDB connection error"); 
-}) 
+const url = 'mongodb://localhost:27017/rolebaby';
 
-module.exports = connection;
+const connect = () => {
+  return new Promise((resolve, reject) => {
+    mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
+      .then(() => {
+        console.log("MongoDB connected");
+
+        // Make the Mongoose connection accessible from your models
+        UserModel.connection = mongoose.connection;
+        resolve();
+      })
+      .catch((error) => {
+        console.error("MongoDB connection error", error);
+        reject(error);
+      });
+  });
+};
+
+module.exports = {
+  connect,
+};
