@@ -20,13 +20,10 @@ class _MyLoginState extends State<MyLogin> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
-  // bool _isNotValidate =false;
+  late SharedPreferences prefs;
 
-late SharedPreferences prefs;
-
-@override
+  @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     initSharedPref();
   }
@@ -35,36 +32,79 @@ late SharedPreferences prefs;
     prefs = await SharedPreferences.getInstance();
   }
 
-  void loginUser() async{
-    if(emailController.text.isNotEmpty && passwordController.text.isNotEmpty){
-      var reqBody = {
-        "email" : emailController.text,
-        "password" : passwordController.text,
-      };
-
-      var response = await http.post(Uri.parse(login),
-          headers: {"Content-type": "application/JSON"},
-          body: jsonEncode(reqBody)
-      );
-
-      var jsonResponse = jsonDecode(response.body);
-      print("JSON response: $jsonResponse");
-      if(jsonResponse['status']){
-        var myToken = jsonResponse['token'];
-        var jwtDecodedToken = JwtDecoder.decode(myToken);
-        var userRole = jwtDecodedToken['role'];
-        prefs.setString('token', myToken);
-        Navigator.push(context, MaterialPageRoute(builder: (context)=>Dashboard(token:myToken, role: userRole)));
-      }
-      else {
-  print('Something went wrong');
-  print("Status Code: ${response.statusCode}");
-  print("Response JSON: $jsonResponse");
-}
-    }
+  void _showEmptyFieldErrorMessage(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Empty Fields'),
+            content: Text('Please fill in all the fields.'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text("OK"),
+              )
+            ],
+          );
+        });
   }
 
-  
+  void _showLoginFailedMessage(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Login Failed'),
+            content: Text('Incorrect email or password. Please try again.'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text("OK"),
+              )
+            ],
+          );
+        });
+  }
+
+  bool _validateFields() {
+    if (emailController.text.isEmpty || passwordController.text.isEmpty) {
+      _showEmptyFieldErrorMessage(context);
+      return false;
+    }
+    return true;
+  }
+
+  void loginUser() async {
+    if (!_validateFields()) return;
+
+    var reqBody = {
+      "email": emailController.text,
+      "password": passwordController.text,
+    };
+
+    var response = await http.post(Uri.parse(login),
+        headers: {"Content-type": "application/JSON"},
+        body: jsonEncode(reqBody));
+
+    var jsonResponse = jsonDecode(response.body);
+    print("JSON response: $jsonResponse");
+    if (jsonResponse['status']) {
+      var myToken = jsonResponse['token'];
+      var jwtDecodedToken = JwtDecoder.decode(myToken);
+      var userRole = jwtDecodedToken['role'];
+      prefs.setString('token', myToken);
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => Dashboard(token: myToken, role: userRole)));
+    } else {
+      _showLoginFailedMessage(context);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -187,7 +227,7 @@ late SharedPreferences prefs;
                                     'Forgot Password',
                                     style: TextStyle(
                                       decoration: TextDecoration.underline,
-                                      color: Color(0xff4c505b),
+                                      color: Color.fromARGB(255, 91, 105, 143),
                                       fontSize: 18,
                                     ),
                                   )),
