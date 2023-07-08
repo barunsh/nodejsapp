@@ -1,4 +1,4 @@
-const UserModel = require('../model/user.model');
+const { UserModel } = require('../model/user.model.js');
 const jwt = require('jsonwebtoken');
 class UserService{
     static async registerUser(names,phone,email,password,role){

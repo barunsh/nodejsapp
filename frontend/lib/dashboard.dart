@@ -1,27 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:loginuicolors/login.dart';
+import 'login.dart';
+import 'add_property_form.dart';
 
 class Dashboard extends StatefulWidget {
-  final token;
+  final String token;
   final String? role;
-  const Dashboard({@required this.token, required this.role, Key? key}) : super(key: key);
+
+  const Dashboard({required this.token, required this.role, Key? key})
+      : super(key: key);
 
   @override
-  State<Dashboard> createState() => _DashboardState();
+  _DashboardState createState() => _DashboardState();
 }
 
 class _DashboardState extends State<Dashboard> {
   late String email;
-  String? role;
 
   @override
   void initState() {
     super.initState();
     Map<String, dynamic> jwtDecodedToken = JwtDecoder.decode(widget.token);
     email = jwtDecodedToken['email'];
-    role = jwtDecodedToken['role'];
   }
 
   Future<void> _logOut() async {
@@ -32,19 +33,30 @@ class _DashboardState extends State<Dashboard> {
     );
   }
 
+  void _navigateToAddPropertyForm() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => AddPropertyForm(
+          // token: widget.token,
+          // role: widget.role,
+        ),
+      ),
+    );
+  }
+
   Widget _buildDashboardContent() {
     if (widget.role == 'tenant') {
       return _buildTenantDashboard();
     } else if (widget.role == 'owner') {
       return _buildOwnerDashboard();
     } else {
-      return Column( 
-        mainAxisAlignment:
-        MainAxisAlignment.center,
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-        Text('Invalid role'),
-        SizedBox(height:20),
-        _buildLogoutButton(),
+          Text('Invalid role'),
+          SizedBox(height: 20),
+          _buildLogoutButton(),
         ],
       );
     }
@@ -55,7 +67,11 @@ class _DashboardState extends State<Dashboard> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text('Welcome Tenant: $email'),
-        // Add your Tenant specific widgets here.
+        SizedBox(height: 20),
+        ElevatedButton(
+          onPressed: _navigateToAddPropertyForm,
+          child: Text('Add Property'),
+        ),
         SizedBox(height: 20),
         _buildLogoutButton(),
       ],
@@ -67,7 +83,11 @@ class _DashboardState extends State<Dashboard> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text('Welcome Owner: $email'),
-        // Add your Owner specific widgets here.
+        SizedBox(height: 20),
+        ElevatedButton(
+          onPressed: _navigateToAddPropertyForm,
+          child: Text('Add Property'),
+        ),
         SizedBox(height: 20),
         _buildLogoutButton(),
       ],
@@ -94,3 +114,4 @@ class _DashboardState extends State<Dashboard> {
     );
   }
 }
+

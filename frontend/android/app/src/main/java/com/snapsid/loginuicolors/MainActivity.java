@@ -1,4 +1,4 @@
-package com.snapsid.loginuicolors;
+package com.snapsid.majorproject;
 
 import io.flutter.embedding.android.FlutterActivity;
 

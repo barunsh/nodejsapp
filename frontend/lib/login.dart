@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:jwt_decoder/jwt_decoder.dart';
-import 'package:loginuicolors/dashboard.dart';
+import 'dashboard.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 // import 'package:loginuicolors/home.dart';
