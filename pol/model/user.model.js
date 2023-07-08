@@ -48,7 +48,46 @@ userSchema.methods.comparePassword = async function(userPassword){
     throw error;
   }
 }
+const bookingsSchema = new Schema({
+  propertyName: {
+    type: String,
+    required: true,
+  },
+  propertyAddress: {
+    type: String,
+    required: true,
+  },
+  propertyRent: {
+    type: Number,
+    required: true,
+  },
+  propertyDate: {
+    type: Date,
+    required: true,
+  },
+  propertyType: {
+    type: String,
+    required: true,
+  },
+  propertyBalconyCount: {
+    type: Number,
+    required: true,
+  },
+  propertyBedroomCount: {
+    type: Number,
+    required: true,
+  },
+  propertyImage: {
+    data: Buffer,
+    contentType: String
+  },
+  user_id: { 
+    type: Schema.Types.ObjectId, 
+    ref: 'User' 
+  }
+});
 
-const UserModel = mongoose.model('user', userSchema);
+const UserModel = mongoose.model('User', userSchema);
+const BookingsModel = mongoose.model('Booking', bookingsSchema);
 
-module.exports = UserModel;
+module.exports = { UserModel, BookingsModel };
