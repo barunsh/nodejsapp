@@ -10,3 +10,13 @@ exports.createBooking = async (req, res, next) => {
     next(error);
   }
 };
+
+// Retrieve all bookings
+exports.getBooking = async (req, res, next) => {
+  try {
+    const booking = await BookingService.getBooking();
+    res.status(200).json({ status: true, booking });
+  } catch (error) {
+    next(error);
+  }
+};
