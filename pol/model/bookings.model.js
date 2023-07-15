@@ -9,27 +9,31 @@ const bookingsSchema = new mongoose.Schema({
   },
   propertyAddress: {
     type: String,
-    // required: true,
+    required: true,
   },
   propertyRent: {
     type: Number,
-    // required: true,
+    required: true,
   },
   propertyType: {
     type: String,
-    // required: true,
+    required: true,
   },
   propertyBalconyCount: {
     type: Number,
-    // required: true,
+    required: true,
   },
   propertyBedroomCount: {
     type: Number,
-    // required: true,
+    required: true,
   },
   propertyDate: {
     type: Date,
-    // required: true,
+    required: true,
+  },
+  propertyImage: {
+    data: Buffer,
+    contentType: String
   },
 });
 
