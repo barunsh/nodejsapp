@@ -3,7 +3,7 @@ import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'login.dart';
 import 'add_property_form.dart';
-
+import 'newbb.dart';
 class Dashboard extends StatefulWidget {
   final String token;
   final String? role;
@@ -45,6 +45,18 @@ class _DashboardState extends State<Dashboard> {
     );
   }
 
+  void _navigateToShowPropertyForm() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => GetDataPage(
+          // token: widget.token,
+          // role: widget.role,
+        ),
+      ),
+    );
+  }
+
   Widget _buildDashboardContent() {
     if (widget.role == 'tenant') {
       return _buildTenantDashboard();
@@ -71,6 +83,10 @@ class _DashboardState extends State<Dashboard> {
         ElevatedButton(
           onPressed: _navigateToAddPropertyForm,
           child: Text('Add Property'),
+        ),
+        ElevatedButton(
+          onPressed: _navigateToShowPropertyForm,
+          child: Text('Show Property'),
         ),
         SizedBox(height: 20),
         _buildLogoutButton(),
