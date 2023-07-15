@@ -1,4 +1,4 @@
-name: loginuicolors
+name: majorproject
 description: A new Flutter application.
 
 # The following line prevents the package from being accidentally published to
@@ -21,9 +21,11 @@ environment:
   sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
+  flutter_keyboard_visibility: 5.4.1
   path_provider_foundation: ^2.0.12
   flutter:
     sdk: flutter
+  flutter_typeahead: 4.6.2
   intl: ^0.17.0
   image_picker: ^1.0.0
   get: any
