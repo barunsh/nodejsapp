@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:http/http.dart' as http;
 import 'bookingdetails.dart';
 
@@ -44,6 +45,7 @@ class GetDataPage extends StatefulWidget {
 class _GetDataPageState extends State<GetDataPage> {
   List<Booking> bookings = [];
   bool isLoading = true;
+  TextEditingController searchController = TextEditingController();
 
   @override
   void initState() {
@@ -81,24 +83,75 @@ class _GetDataPageState extends State<GetDataPage> {
     }
   }
 
+  List<String> searchBookings(String pattern) {
+    return bookings
+        .where((booking) =>
+            booking.propertyName.toLowerCase().contains(pattern.toLowerCase()) ||
+            booking.propertyAddress.toLowerCase().contains(pattern.toLowerCase()))
+        .map((booking) => booking.propertyName)
+        .toList();
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Data Page'),
+        title: Text('🏚️All Properties'),
       ),
       body: isLoading
           ? Center(
               child: CircularProgressIndicator(),
             )
-          : ListView.builder(
-              itemCount: bookings.length,
-              itemBuilder: (context, index) {
-                final booking = bookings[index];
-                return CardList(
-                  booking: booking,
-                );
-              },
+          : Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TypeAheadField<String>(
+                    textFieldConfiguration: TextFieldConfiguration(
+                      controller: searchController,
+                      onChanged: (value){
+                        setState(() {});
+                      },
+                      decoration: InputDecoration(
+                        labelText: 'Search',
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
+                    suggestionsCallback: (pattern) async {
+                      return searchBookings(pattern);
+                      },
+                    itemBuilder: (context, suggestion) {
+                      return ListTile(
+                        title: Text(suggestion),
+                      );
+                    },
+                    onSuggestionSelected: (suggestion) {
+                      searchController.text = suggestion;
+                    },
+                    suggestionsBoxDecoration: SuggestionsBoxDecoration(
+                      constraints: BoxConstraints(maxHeight: 210.0),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: bookings.length,
+                    itemBuilder: (context, index) {
+                      final booking = bookings[index];
+                      final searchPattern = searchController.text.toLowerCase();
+                      if (searchPattern.isNotEmpty &&
+                          !booking.propertyName.toLowerCase().contains(searchPattern) &&
+                          !booking.propertyAddress.toLowerCase().contains(searchPattern)) {
+                        return Container();
+                      }
+                      return CardList(
+                        booking: booking,
+                      );
+                    },
+                  ),
+                ),
+              ],
             ),
     );
   }
@@ -142,7 +195,7 @@ class CardList extends StatelessWidget {
                   ),
                   );
                 },
-                child: Text('Get Information'),
+                child: Text('ℹ️ Get Information'),
               ),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
@@ -151,7 +204,7 @@ class CardList extends StatelessWidget {
                 onPressed: () {
                   // Handle second button press
                 },
-                child: Text('Book Now'),
+                child: Text('📅 Book Now'),
               ),
             ],
           ),
