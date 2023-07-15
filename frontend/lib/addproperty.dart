@@ -1,16 +1,15 @@
-// import 'dart:io';
-// ignore_for_file: deprecated_member_use
-
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
-// import 'package:insta_assets_picker/insta_assets_picker.dart';
-import 'dart:typed_data';
-import 'package:multi_image_picker/multi_image_picker.dart';
-
+import 'dashboard.dart';
 
 class AddPropertyForm extends StatefulWidget {
+  final String? token;
+  final String? role;
+
+  AddPropertyForm({this.token, this.role});
+
   @override
   _AddPropertyFormState createState() => _AddPropertyFormState();
 }
@@ -18,13 +17,11 @@ class AddPropertyForm extends StatefulWidget {
 final DateFormat formatter = DateFormat('yyyy-MM-dd');
 
 class _AddPropertyFormState extends State<AddPropertyForm> {
-  Uint8List? _selectedThumbnailData;
   TextEditingController _propertyNameController = TextEditingController();
   TextEditingController _propertyAddressController = TextEditingController();
   TextEditingController _propertyRentController = TextEditingController();
   DateTime? _selectedDate;
   String _selectedPropertyType = '';
-  // List<AssetEntity>? _selectedAssets;
   int _selectedBalcony = 1;
   int _selectedBedroom = 1;
 
@@ -36,6 +33,9 @@ class _AddPropertyFormState extends State<AddPropertyForm> {
       lastDate: DateTime(2025),
     ).then((pickedDate) {
       if (pickedDate == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Please select a date')),
+    );
         return;
       }
       setState(() {
@@ -44,23 +44,6 @@ class _AddPropertyFormState extends State<AddPropertyForm> {
     });
   }
 
-  Future<void> _selectImage() async {
-    try {
-        List<Asset> resultList = List<Asset>.empty();
-        resultList = await MultiImagePicker.pickImages(maxImages: 1);
-        Asset firstAsset = resultList[0];
-        ByteData assetData = await firstAsset.requestOriginal();
-    
-        setState(() {
-          _selectedThumbnailData = assetData.buffer.asUint8List();
-        });
-    } catch (error) {
-        print('Image selection failed: $error');
-    }
-}
-
-  
-
   void _submitForm() async {
     final String propertyName = _propertyNameController.text;
     final String propertyAddress = _propertyAddressController.text;
@@ -68,7 +51,42 @@ class _AddPropertyFormState extends State<AddPropertyForm> {
     final String propertyType = _selectedPropertyType;
     final String balconyCount = _selectedBalcony.toString();
     final String bedroomCount = _selectedBedroom.toString();
-    final String propertyDate = formatter.format(_selectedDate!);
+    final String propertyDate = _selectedDate != null ? formatter.format(_selectedDate!) : '';
+
+
+      if (propertyName.isEmpty) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Please enter property name')),
+    );
+    return;
+  }
+
+  if (propertyAddress.isEmpty) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Please enter property address')),
+    );
+    return;
+  }
+
+  if (propertyRent.isEmpty) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Please enter property rent')),
+    );
+    return;
+  }
+
+  if (propertyType.isEmpty) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Please select a property type')),
+    );
+    return;
+  }
+  if (_selectedDate == null) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Please select a date')),
+    );
+    return;
+  }
 
     final Map<String, String> requestBody = {
       'propertyName': propertyName,
@@ -80,26 +98,36 @@ class _AddPropertyFormState extends State<AddPropertyForm> {
       'propertyDate': propertyDate,
     };
 
-    // final encodedData = requestBody.entries
-    //     .map((e) =>
-    //         '${Uri.encodeComponent(e.key)}=${Uri.encodeComponent(e.value)}')
-    //     .join('&');
-
     final response = await http.post(
       Uri.parse('http://localhost:3000/bookings'),
       headers: {"Content-Type": "application/json"},
       body: jsonEncode(requestBody),
     );
 
-    if (response.statusCode == 200) {
-      // Request successful, do something
-      print('Form submitted successfully');
+
+    print('Response status: ${response.statusCode}');
+    print('Response body: ${response.body}');
+
+
+    if (response.statusCode == 201) {
+      var jsonResponse = jsonDecode(response.body);
+
+      if(jsonResponse['status']){
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content:Text('Property successfully added'),
+            duration: Duration(seconds: 3),
+          ),
+        );
+        Navigator.pushNamed(context, 'dashboard');
+      } else{
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Failed to add prop')),
+        );
+      }
     } else {
-      // Request failed, handle the error
-      print('Form submission failed: ${response.reasonPhrase}');
+      print('Server responded with status code ${response.statusCode}');
     }
   }
-
   Container _buildPropertyTypeContainer(
       String type, IconData iconData, bool isSelected) {
     return Container(
@@ -219,6 +247,7 @@ class _AddPropertyFormState extends State<AddPropertyForm> {
                         decoration: InputDecoration(
                           labelText: 'Property Address',
                           border: InputBorder.none,
+                          
                           contentPadding: EdgeInsets.all(10.0),
                         ),
                       ),
@@ -373,44 +402,6 @@ class _AddPropertyFormState extends State<AddPropertyForm> {
                   ),
                 ],
               ),
-              const SizedBox(
-                height: 20.0,
-              ),
-              Text(
-                'Property Image',
-                style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 10.0),
-              GestureDetector(
-  behavior: HitTestBehavior.translucent,
-  onTap: _selectImage,
-  child: Container(
-    decoration: BoxDecoration(
-      border: Border.all(
-        color: Colors.grey,
-        width: 100.0,
-      ),
-    ),
-    child: _selectedThumbnailData != null
-        ? Image.memory(
-            _selectedThumbnailData!,
-            width: 300,
-            height: 300,
-            fit: BoxFit.cover,
-          )
-        : Container(
-            height: 60.0,
-            child: Icon(
-              Icons.image,
-              size: 10.0,
-              color: Colors.grey,
-            ),
-          ),
-  ),
-),
-
-
-
               const SizedBox(height: 20.0),
               ElevatedButton(
                 style: ButtonStyle(

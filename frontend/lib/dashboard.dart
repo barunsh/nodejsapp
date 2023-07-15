@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'login.dart';
-import 'add_property_form.dart';
-import 'newbb.dart';
+import 'addproperty.dart';
+import 'showproperty.dart';
 class Dashboard extends StatefulWidget {
   final String token;
   final String? role;
@@ -38,11 +38,10 @@ class _DashboardState extends State<Dashboard> {
       context,
       MaterialPageRoute(
         builder: (context) => AddPropertyForm(
-          // token: widget.token,
-          // role: widget.role,
+          token: widget.token,
+          role: widget.role),
         ),
-      ),
-    );
+      );
   }
 
   void _navigateToShowPropertyForm() {
