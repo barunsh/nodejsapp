@@ -35,6 +35,10 @@ const bookingsSchema = new mongoose.Schema({
     data: Buffer,
     contentType: String
   },
+  bookingRemaining: {
+    type: Number,
+    default: 3
+  }
 });
 
 module.exports = mongoose.model('Bookings', bookingsSchema);

@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:http/http.dart' as http;
 import 'bookingdetails.dart';
+import 'bookingpage.dart';
+
 
 
 class Booking {
@@ -13,6 +15,7 @@ class Booking {
   final int propertyBalconyCount;
   final int propertyBedroomCount;
   final DateTime propertyDate;
+  final int bookingRemaining;
 
   Booking({
     required this.propertyName,
@@ -22,6 +25,7 @@ class Booking {
     required this.propertyBalconyCount,
     required this.propertyBedroomCount,
     required this.propertyDate,
+    required this.bookingRemaining,
   });
 
   factory Booking.fromJson(Map<String, dynamic> json) {
@@ -33,6 +37,7 @@ class Booking {
       propertyBalconyCount: json['propertyBalconyCount'] ?? 0,
       propertyBedroomCount: json['propertyBedroomCount'] ?? 0,
       propertyDate: json['propertyDate'] != null ? DateTime.parse(json['propertyDate']) : DateTime.now(),
+      bookingRemaining: json['bookingRemaining'] ?? 0,
     );
   }
 }
@@ -157,61 +162,114 @@ class _GetDataPageState extends State<GetDataPage> {
   }
 }
 
-class CardList extends StatelessWidget {
+class CardList extends StatefulWidget {
   final Booking booking;
 
   CardList({required this.booking});
 
   @override
+  _CardListState createState() => _CardListState();
+}
+
+class _CardListState extends State<CardList> {
+  bool isBookingFull = false;
+
+  @override
+  void initState() {
+    super.initState();
+    checkBookingFull();
+  }
+
+  void checkBookingFull() {
+    if (widget.booking.bookingRemaining <= 0) {
+      setState(() {
+        isBookingFull = true;
+      });
+    } else {
+      setState(() {
+        isBookingFull = false;
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Card(
       margin: EdgeInsets.symmetric(vertical: 8.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Stack(
         children: [
-          ListTile(
-            title: Text(booking.propertyName),
-            subtitle: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('Price: Rs. ${booking.propertyRent}'),
-                Text('Address: ${booking.propertyAddress}'),
-              ],
-            ),
-          ),
-          SizedBox(height: 16),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.teal,
+              ListTile(
+                title: Text(widget.booking.propertyName),
+                subtitle: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('Price: Rs. ${widget.booking.propertyRent}'),
+                    Text('Address: ${widget.booking.propertyAddress}'),
+                  ],
                 ),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => BookingDetails(booking:booking),
+              ),
+              SizedBox(height: 16),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.teal,
+                    ),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => BookingDetails(booking: widget.booking),
+                        ),
+                      );
+                    },
+                    child: Text('ℹ️ Get Information'),
                   ),
-                  );
-                },
-                child: Text('ℹ️ Get Information'),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.teal,
+                    ),
+                    onPressed: () {
+                      if (!isBookingFull) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => BookingPage(booking: widget.booking),
+                          ),
+                        );
+                      }
+                    },
+                    child: Text('📅 Book Now'),
+                  ),
+                ],
               ),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.teal,
-                ),
-                onPressed: () {
-                  // Handle second button press
-                },
-                child: Text('📅 Book Now'),
-              ),
+              SizedBox(height: 16),
             ],
           ),
-          SizedBox(height: 16),
+          if (isBookingFull)
+            Positioned(
+              top: 0,
+              right: 0,
+              child: Container(
+                padding: EdgeInsets.all(8.0),
+                color: Colors.red,
+                child: Text(
+                  'Booking Full',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
         ],
       ),
     );
   }
 }
+
 

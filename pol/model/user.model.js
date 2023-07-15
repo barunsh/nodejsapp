@@ -48,6 +48,7 @@ userSchema.methods.comparePassword = async function(userPassword){
     throw error;
   }
 }
+
 const bookingsSchema = new Schema({
   propertyName: {
     type: String,
@@ -84,6 +85,10 @@ const bookingsSchema = new Schema({
   user_id: { 
     type: Schema.Types.ObjectId, 
     ref: 'User' 
+  },
+  bookingRemaining: {
+    type: Number,
+    default: 3
   }
 });
 
