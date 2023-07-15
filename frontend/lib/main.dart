@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:loginuicolors/propertydetails.dart';
 import '/dashboard.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -9,7 +10,8 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SharedPreferences prefs = await SharedPreferences.getInstance();
   final userToken = prefs.getString('token');
-  final jwtDecodedToken = userToken != null ? JwtDecoder.decode(userToken) : null;
+  final jwtDecodedToken =
+      userToken != null ? JwtDecoder.decode(userToken) : null;
   final userRole = jwtDecodedToken != null ? jwtDecodedToken['role'] : null;
   runApp(MyApp(token: userToken, role: userRole));
 }
@@ -31,12 +33,17 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primaryColor: Colors.black,
         visualDensity: VisualDensity.adaptivePlatformDensity,
+        useMaterial3: true,
       ),
-      initialRoute: (token != null && JwtDecoder.isExpired(token) == false) ? 'dashboard' : 'login',
+      initialRoute: (token != null && JwtDecoder.isExpired(token) == false)
+          ? 'dashboard'
+          : 'login',
       routes: {
         'login': (context) => MyLogin(),
         'register': (context) => MyRegister(),
-        'dashboard': (context) => Dashboard(token: token, role: role ?? 'tenant'),
+        'dashboard': (context) =>
+            Dashboard(token: token, role: role ?? 'tenant'),
+        'propertydetails': (context) => PropertyDetailPage(),
       },
     );
   }

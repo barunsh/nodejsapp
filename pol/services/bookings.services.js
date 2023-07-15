@@ -11,8 +11,7 @@ class BookingsService {
     }
   }
 
-  // Get all bookings
-  static async getAllBookings() {
+  static async getBooking() {
     try {
       return await BookingsModel.find();
     } catch (error) {

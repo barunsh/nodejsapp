@@ -29,7 +29,7 @@ exports.login = async (req, res, next) => {
             return res.status(400).json({ status: false, message: "Password is invalid. Please try a valid one!" });
         }
 
-        let tokenData = { _id: user._id, email: user.email, role:user.role };
+        let tokenData = { _id: user._id, email: user.email, names:user.names,role:user.role };
 
         const token = await UserService.generateToken(tokenData, "secretKey", '1h');
 
@@ -39,3 +39,11 @@ exports.login = async (req, res, next) => {
         next(error);
     }
 };
+exports.getUser = async (req, res, next) => {
+    try {
+      const user = await UserService.getUser();
+      res.status(200).json({ status: true, user });
+    } catch (error) {
+      next(error);
+    }
+  };
