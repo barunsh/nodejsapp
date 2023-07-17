@@ -11,10 +11,10 @@ exports.createBooking = async (req, res, next) => {
   }
 };
 exports.getBooking = async (req, res, next) => {
-  try {
-    const booking = await BookingService.getBooking();
-    res.status(200).json({ status: true, booking });
-  } catch (error) {
-    next(error);
-  }
-};
+    try {
+      const booking = await UserService.getUser();
+      res.status(200).json({ status: true, booking });
+    } catch (error) {
+      next(error);
+    }
+  };

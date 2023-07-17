@@ -122,27 +122,6 @@ class _DashboardState extends State<Dashboard> {
           ],
         ),
       ),
-      // Center(
-      //     child: Column(
-      //       mainAxisAlignment: MainAxisAlignment.center,
-      //       children: [
-      //         Text('Welcome Tenant: $email'),
-      //         SizedBox(height: 20),
-      //         ElevatedButton(
-      //           onPressed: () {
-      //             Navigator.push(
-      //                 context,
-      //                 MaterialPageRoute(
-      //                   builder: (context) => TenantViewPage(),
-      //                 ));
-      //           },
-      //           child: Text('Add Property'),
-      //         ),
-      //         SizedBox(height: 20),
-      //         _buildLogoutButton(),
-      //       ],
-      //     ),
-      //   ),
     );
   }
 
@@ -151,6 +130,7 @@ class _DashboardState extends State<Dashboard> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text('Welcome Owner: $email'),
+        Text('Welcome Owner: $names'),
         SizedBox(height: 20),
         ElevatedButton(
           onPressed: _navigateToAddPropertyForm,

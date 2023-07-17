@@ -32,7 +32,6 @@ class _TenantViewPageState extends State<TenantViewPage> {
       'Kathmandu,Kritipur',
     ),
   ];
-  int _currentIndex = 0;
 
   @override
   Widget build(BuildContext context) {
