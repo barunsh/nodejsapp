@@ -2,13 +2,15 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
+import 'booking.dart';
 // import 'dashboard.dart';
 
 class AddPropertyForm extends StatefulWidget {
   final String? token;
   final String? role;
+  final int? phone;
 
-  AddPropertyForm({this.token, this.role});
+  AddPropertyForm({this.token, this.role, this.phone});
 
   @override
   _AddPropertyFormState createState() => _AddPropertyFormState();
@@ -20,6 +22,7 @@ class _AddPropertyFormState extends State<AddPropertyForm> {
   TextEditingController _propertyNameController = TextEditingController();
   TextEditingController _propertyAddressController = TextEditingController();
   TextEditingController _propertyRentController = TextEditingController();
+  TextEditingController _bookingRemainingController = TextEditingController();
   DateTime? _selectedDate;
   String _selectedPropertyType = '';
   int _selectedBalcony = 1;
@@ -48,6 +51,7 @@ class _AddPropertyFormState extends State<AddPropertyForm> {
     final String propertyName = _propertyNameController.text;
     final String propertyAddress = _propertyAddressController.text;
     final String propertyRent = _propertyRentController.text;
+    final String bookingRemaining = _bookingRemainingController.text;
     final String propertyType = _selectedPropertyType;
     final String balconyCount = _selectedBalcony.toString();
     final String bedroomCount = _selectedBedroom.toString();
@@ -92,6 +96,7 @@ class _AddPropertyFormState extends State<AddPropertyForm> {
       'propertyName': propertyName,
       'propertyAddress': propertyAddress,
       'propertyRent': propertyRent,
+      'bookingRemaining' : bookingRemaining,
       'propertyType': propertyType,
       'propertyBalconyCount': balconyCount,
       'propertyBedroomCount': bedroomCount,
@@ -113,13 +118,21 @@ class _AddPropertyFormState extends State<AddPropertyForm> {
       var jsonResponse = jsonDecode(response.body);
 
       if(jsonResponse['status']){
+        // String names  = jsonResponse['names'];
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content:Text('Property successfully added'),
             duration: Duration(seconds: 3),
           ),
         );
-        Navigator.pushNamed(context, 'dashboard');
+        Navigator.pushNamed(context, 'dashboard',
+        arguments: {
+          'token': widget.token!,
+          'role': widget.role!,
+          // 'names': names,
+          'phone': widget.phone,
+        },
+        );
       } else{
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Failed to add prop')),
         );
@@ -401,6 +414,29 @@ class _AddPropertyFormState extends State<AddPropertyForm> {
                     ),
                   ),
                 ],
+              ),
+              Text(
+                'Booking Remaining',
+                style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 10.0),
+              Container(
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: Colors.grey,
+                    width: 1.0,
+                  ),
+                  borderRadius: BorderRadius.circular(5.0),
+                ),
+                child: TextField(
+                  controller: _bookingRemainingController,
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                    labelText: 'Booking Remaining',
+                    border: InputBorder.none,
+                    contentPadding: EdgeInsets.all(10.0),
+                  ),
+                ),
               ),
               const SizedBox(height: 20.0),
               ElevatedButton(

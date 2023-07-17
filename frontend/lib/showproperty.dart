@@ -2,45 +2,9 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:http/http.dart' as http;
-import 'bookingdetails.dart';
+import 'getdetails.dart';
+import 'booking.dart';
 import 'bookingpage.dart';
-
-
-
-class Booking {
-  final String propertyName;
-  final String propertyAddress;
-  final int propertyRent;
-  final String propertyType;
-  final int propertyBalconyCount;
-  final int propertyBedroomCount;
-  final DateTime propertyDate;
-  final int bookingRemaining;
-
-  Booking({
-    required this.propertyName,
-    required this.propertyAddress,
-    required this.propertyRent,
-    required this.propertyType,
-    required this.propertyBalconyCount,
-    required this.propertyBedroomCount,
-    required this.propertyDate,
-    required this.bookingRemaining,
-  });
-
-  factory Booking.fromJson(Map<String, dynamic> json) {
-    return Booking(
-      propertyName: json['propertyName'] ?? '',
-      propertyAddress: json['propertyAddress'] ?? '',
-      propertyRent: json['propertyRent'] ?? 0,
-      propertyType: json['propertyType'] ?? '',
-      propertyBalconyCount: json['propertyBalconyCount'] ?? 0,
-      propertyBedroomCount: json['propertyBedroomCount'] ?? 0,
-      propertyDate: json['propertyDate'] != null ? DateTime.parse(json['propertyDate']) : DateTime.now(),
-      bookingRemaining: json['bookingRemaining'] ?? 0,
-    );
-  }
-}
 
 class GetDataPage extends StatefulWidget {
   @override
@@ -97,7 +61,6 @@ class _GetDataPageState extends State<GetDataPage> {
         .toList();
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -115,7 +78,7 @@ class _GetDataPageState extends State<GetDataPage> {
                   child: TypeAheadField<String>(
                     textFieldConfiguration: TextFieldConfiguration(
                       controller: searchController,
-                      onChanged: (value){
+                      onChanged: (value) {
                         setState(() {});
                       },
                       decoration: InputDecoration(
@@ -125,7 +88,7 @@ class _GetDataPageState extends State<GetDataPage> {
                     ),
                     suggestionsCallback: (pattern) async {
                       return searchBookings(pattern);
-                      },
+                    },
                     itemBuilder: (context, suggestion) {
                       return ListTile(
                         title: Text(suggestion),
@@ -271,5 +234,3 @@ class _CardListState extends State<CardList> {
     );
   }
 }
-
-

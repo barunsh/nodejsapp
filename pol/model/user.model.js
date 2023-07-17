@@ -4,6 +4,12 @@ const bcrypt = require("bcrypt");
 const { Schema } = mongoose;
 
 const userSchema = new Schema({
+  id: {
+    type: Number,
+    required: true,
+    unique: true,
+    default: 1, // Set the default value to 1
+  },
   names: {
     type: String,
     required: true,
@@ -49,50 +55,6 @@ userSchema.methods.comparePassword = async function(userPassword){
   }
 }
 
-const bookingsSchema = new Schema({
-  propertyName: {
-    type: String,
-    required: true,
-  },
-  propertyAddress: {
-    type: String,
-    required: true,
-  },
-  propertyRent: {
-    type: Number,
-    required: true,
-  },
-  propertyDate: {
-    type: Date,
-    required: true,
-  },
-  propertyType: {
-    type: String,
-    required: true,
-  },
-  propertyBalconyCount: {
-    type: Number,
-    required: true,
-  },
-  propertyBedroomCount: {
-    type: Number,
-    required: true,
-  },
-  propertyImage: {
-    data: Buffer,
-    contentType: String
-  },
-  user_id: { 
-    type: Schema.Types.ObjectId, 
-    ref: 'User' 
-  },
-  bookingRemaining: {
-    type: Number,
-    default: 3
-  }
-});
-
 const UserModel = mongoose.model('User', userSchema);
-const BookingsModel = mongoose.model('Booking', bookingsSchema);
 
-module.exports = { UserModel, BookingsModel };
+module.exports = { UserModel};

@@ -96,11 +96,20 @@ class _MyLoginState extends State<MyLogin> {
       var myToken = jsonResponse['token'];
       var jwtDecodedToken = JwtDecoder.decode(myToken);
       var userRole = jwtDecodedToken['role'];
-      prefs.setString('token', myToken);
+      var names = jsonResponse['names'];
+      var phone = jsonResponse['phone'];
+
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setString('token', myToken);
       Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => Dashboard(token: myToken, role: userRole)));
+              builder: (context) => Dashboard(
+                token: myToken,
+                role: userRole,
+                names: names,
+                phone: phone,
+                )));
     } else {
       _showLoginFailedMessage(context);
     }

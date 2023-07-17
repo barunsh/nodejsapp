@@ -19,6 +19,27 @@ class BookingsService {
       throw error;
     }
   }
+
+
+  static async updateBooking(bookingId, updatedData) {
+    try {
+      return await BookingsModel.findByIdAndUpdate(bookingId, updatedData, { new: true });
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  // Delete a booking by ID
+  static async deleteBooking(bookingId) {
+    try {
+      return await BookingsModel.findByIdAndDelete(bookingId);
+    } catch (error) {
+      throw error;
+    }
+  }
 }
+
+  
+
 
 module.exports = BookingsService;

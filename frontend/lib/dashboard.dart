@@ -8,9 +8,16 @@ import 'showproperty.dart';
 class Dashboard extends StatefulWidget {
   final String token;
   final String? role;
+  final String? names;
+  final int? phone;
 
-  const Dashboard({required this.token, required this.role, Key? key})
-      : super(key: key);
+  const Dashboard({
+    required this.token,
+    required this.role,
+    required this.names,
+    required this.phone,
+    Key? key,
+  }) : super(key: key);
 
   @override
   _DashboardState createState() => _DashboardState();
@@ -18,12 +25,28 @@ class Dashboard extends StatefulWidget {
 
 class _DashboardState extends State<Dashboard> {
   late String email;
+  late String names;
+  int? phone;
 
   @override
   void initState() {
     super.initState();
     Map<String, dynamic> jwtDecodedToken = JwtDecoder.decode(widget.token);
     email = jwtDecodedToken['email'];
+     names = jwtDecodedToken['names'];
+    phone = jwtDecodedToken['phone'];
+    print(jwtDecodedToken);
+  }
+
+  @override
+  void didUpdateWidget(Dashboard oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.names != oldWidget.names || widget.phone != oldWidget.phone) {
+      setState(() {
+        // names = widget.names;
+        phone = widget.phone;
+      });
+    }
   }
 
   Future<void> _logOut() async {
@@ -40,9 +63,10 @@ class _DashboardState extends State<Dashboard> {
       MaterialPageRoute(
         builder: (context) => AddPropertyForm(
           token: widget.token,
-          role: widget.role),
+          role: widget.role,
         ),
-      );
+      ),
+    );
   }
 
   void _navigateToShowPropertyForm() {
@@ -78,7 +102,10 @@ class _DashboardState extends State<Dashboard> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text('Welcome Tenant: $email'),
+        Text(
+          'Welcome Tenant: ${names ?? 'N/A'}',
+          style: TextStyle(fontSize: 18),
+        ),
         SizedBox(height: 20),
         ElevatedButton(
           onPressed: _navigateToAddPropertyForm,
@@ -98,11 +125,18 @@ class _DashboardState extends State<Dashboard> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text('Welcome Owner: $email'),
+        Text(
+          'Welcome Owner: ${names ?? 'N/A'}',
+          style: TextStyle(fontSize: 18),
+        ),
         SizedBox(height: 20),
         ElevatedButton(
           onPressed: _navigateToAddPropertyForm,
           child: Text('Add Property'),
+        ),
+        ElevatedButton(
+          onPressed: _navigateToShowPropertyForm,
+          child: Text('Show Property'),
         ),
         SizedBox(height: 20),
         _buildLogoutButton(),
@@ -124,10 +158,25 @@ class _DashboardState extends State<Dashboard> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text('Dashboard'),
+      ),
       body: Center(
-        child: _buildDashboardContent(),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              'Names: ${names ?? 'N/A'}',
+              style: TextStyle(fontSize: 16),
+            ),
+            Text(
+              'Phone: ${phone ?? 'N/A'}',
+              style: TextStyle(fontSize: 16),
+            ),
+            _buildDashboardContent(),
+          ],
+        ),
       ),
     );
   }
 }
-

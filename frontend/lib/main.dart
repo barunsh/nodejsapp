@@ -11,15 +11,29 @@ void main() async {
   final userToken = prefs.getString('token');
   final jwtDecodedToken = userToken != null ? JwtDecoder.decode(userToken) : null;
   final userRole = jwtDecodedToken != null ? jwtDecodedToken['role'] : null;
-  runApp(MyApp(token: userToken, role: userRole));
+  final names = jwtDecodedToken != null ? jwtDecodedToken['names'] : null;
+  final phone = jwtDecodedToken != null ? jwtDecodedToken['phone'] : null;
+
+  print('JSON response: $jwtDecodedToken');
+  runApp(MyApp(
+    token: userToken,
+    role: userRole,
+    names: names != null ? names.toString() : null,
+    phone: phone != null ? int.tryParse(phone.toString()) : null,
+  ));
 }
 
 class MyApp extends StatelessWidget {
-  final token;
+  final String? token;
   final String? role;
+  final String? names;
+  final int? phone;
+
   const MyApp({
-    @required this.token,
+    required this.token,
     required this.role,
+    this.names,
+    this.phone,
     Key? key,
   }) : super(key: key);
 
@@ -32,11 +46,16 @@ class MyApp extends StatelessWidget {
         primaryColor: Colors.black,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      initialRoute: (token != null && JwtDecoder.isExpired(token) == false) ? 'dashboard' : 'login',
+      initialRoute: (token != null && JwtDecoder.isExpired(token!) == false) ? 'dashboard' : 'login',
       routes: {
         'login': (context) => MyLogin(),
         'register': (context) => MyRegister(),
-        'dashboard': (context) => Dashboard(token: token, role: role ?? 'tenant'),
+        'dashboard': (context) => Dashboard(
+          token: token!,
+          role: role!,
+          names: names,
+          phone: phone,
+        ),
       },
     );
   }

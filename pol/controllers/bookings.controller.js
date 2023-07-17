@@ -27,6 +27,8 @@ exports.getBooking = async (req, res, next) => {
   }
 };
 
+
+
 // Upload an image
 exports.uploadImage = async (req, res, next) => {
   try {
