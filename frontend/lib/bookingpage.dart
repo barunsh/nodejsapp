@@ -3,48 +3,57 @@ import 'booking.dart';
 
 class BookingPage extends StatefulWidget {
   final Booking booking;
+  final String? names;
+  final String? email;
+  final int? phone;
 
-  const BookingPage({required this.booking});
+  BookingPage({required this.booking, this.names, this.email, this.phone});
 
   @override
   _BookingPageState createState() => _BookingPageState();
 }
 
 class _BookingPageState extends State<BookingPage> {
-  String email = ''; // New variable to store email input
-  String phone = ''; // New variable to store phone input
-  bool isBookingFull = false;
+  TextEditingController emailController = TextEditingController();
+  TextEditingController phoneController = TextEditingController();
+  TextEditingController namesController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    checkBookingFull();
+    bringDetails();
   }
 
-  void checkBookingFull() {
-    if (widget.booking.bookingRemaining <= 0) {
+  void bringDetails() {
+    if (widget.names != null && widget.phone != null && widget.email != null) {
       setState(() {
-        isBookingFull = true;
+        namesController.text = widget.names!;
+        emailController.text = widget.email!;
+        phoneController.text = widget.phone.toString();
       });
     } else {
       setState(() {
-        isBookingFull = false;
+        namesController.text = ''; // Set the names field to an empty string
+        emailController.text = ''; // Set the email field to an empty string
+        phoneController.text = ''; // Set the phone field to an empty string
       });
     }
   }
 
-  // Function to handle booking a property
   void bookProperty() {
-    if (!isBookingFull) {
-      // Update email and phone in the booking object
-      // widget.booking.email = email;
-      // widget.booking.phone = phone;
+    // Update email and phone in the booking object
+    String email = emailController.text;
+    int phone = int.parse(phoneController.text);
 
-      // Perform any further actions, such as saving the booking to the database or displaying a success message
-    } else {
-      // Display an error message or handle the case when the booking limit is reached
-      print('Booking limit reached');
-    }
+    // Perform any further actions, such as saving the booking to the database or displaying a success message
+  }
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    phoneController.dispose();
+    namesController.dispose();
+    super.dispose();
   }
 
   @override
@@ -78,15 +87,16 @@ class _BookingPageState extends State<BookingPage> {
             SizedBox(height: 8),
             Text('Property Date: ${widget.booking.propertyDate.toString()}'),
             SizedBox(height: 16),
+            Text(
+              'Names: ${namesController.text.isEmpty ? 'N/A' : namesController.text}',
+              style: TextStyle(fontSize: 16),
+            ),
+            SizedBox(height: 16),
             Row(
               children: [
                 Expanded(
                   child: TextField(
-                    onChanged: (value) {
-                      setState(() {
-                        email = value;
-                      });
-                    },
+                    controller: emailController,
                     decoration: InputDecoration(
                       labelText: 'Email',
                     ),
@@ -95,11 +105,7 @@ class _BookingPageState extends State<BookingPage> {
                 SizedBox(width: 16),
                 Expanded(
                   child: TextField(
-                    onChanged: (value) {
-                      setState(() {
-                        phone = value;
-                      });
-                    },
+                    controller: phoneController,
                     decoration: InputDecoration(
                       labelText: 'Phone Number',
                     ),
@@ -107,9 +113,13 @@ class _BookingPageState extends State<BookingPage> {
                 ),
               ],
             ),
-            SizedBox(height: 16),
             Row(
               children: [
+                ElevatedButton(
+                  onPressed: bringDetails,
+                  child: Text('Bring Details'),
+                ),
+                SizedBox(width: 16),
                 Expanded(
                   child: ElevatedButton(
                     onPressed: bookProperty,
@@ -118,14 +128,6 @@ class _BookingPageState extends State<BookingPage> {
                 ),
               ],
             ),
-            if (isBookingFull)
-              Text(
-                'Booking Full. No more bookings allowed.',
-                style: TextStyle(
-                  color: Colors.red,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
           ],
         ),
       ),

@@ -7,6 +7,12 @@ import 'booking.dart';
 import 'bookingpage.dart';
 
 class GetDataPage extends StatefulWidget {
+  final String? names;
+  final String? email;
+  final int? phone;
+
+  GetDataPage({this.names, this.email, this.phone});
+
   @override
   _GetDataPageState createState() => _GetDataPageState();
 }
@@ -73,6 +79,10 @@ class _GetDataPageState extends State<GetDataPage> {
             )
           : Column(
               children: [
+                Text(
+                  'Names: ${widget.names ?? 'N/A'}',
+                  style: TextStyle(fontSize: 16),
+                ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: TypeAheadField<String>(
@@ -127,8 +137,11 @@ class _GetDataPageState extends State<GetDataPage> {
 
 class CardList extends StatefulWidget {
   final Booking booking;
+  final String? names;
+  final String? email;
+  final int? phone;
 
-  CardList({required this.booking});
+  CardList({required this.booking, this.email, this.names, this.phone});
 
   @override
   _CardListState createState() => _CardListState();
@@ -201,7 +214,12 @@ class _CardListState extends State<CardList> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => BookingPage(booking: widget.booking),
+                            builder: (context) => BookingPage(
+                              booking: widget.booking,
+                              email: widget.email,
+                              // names: widget.names,
+                              phone: widget.phone,
+                              ),
                           ),
                         );
                       }

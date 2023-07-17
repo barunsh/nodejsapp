@@ -20,9 +20,10 @@ class BookingsService {
     }
   }
 
-
-  static async updateBooking(bookingId, updatedData) {
+  // Update a booking
+  static async updateBooking(bookingId, propertyName, propertyAddress, propertyRent, propertyType, propertyBalconyCount, propertyBedroomCount, propertyDate) {
     try {
+      const updatedData = { propertyName, propertyAddress, propertyRent, propertyType, propertyBalconyCount, propertyBedroomCount, propertyDate };
       return await BookingsModel.findByIdAndUpdate(bookingId, updatedData, { new: true });
     } catch (error) {
       throw error;
@@ -38,8 +39,5 @@ class BookingsService {
     }
   }
 }
-
-  
-
 
 module.exports = BookingsService;

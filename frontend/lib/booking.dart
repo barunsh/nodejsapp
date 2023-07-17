@@ -6,7 +6,10 @@ class Booking {
   final int propertyBalconyCount;
   final int propertyBedroomCount;
   final DateTime propertyDate;
-  int bookingRemaining; // Change from final to regular instance variable
+  int bookingRemaining;
+  String? email;
+  int? phone;
+  String? names; // Change from final to regular instance variable
 
   Booking({
     required this.propertyName,
@@ -17,6 +20,9 @@ class Booking {
     required this.propertyBedroomCount,
     required this.propertyDate,
     required this.bookingRemaining,
+    this.email,
+    this.phone,
+    this.names,
   });
 
   factory Booking.fromJson(Map<String, dynamic> json) {
@@ -29,6 +35,9 @@ class Booking {
       propertyBedroomCount: json['propertyBedroomCount'] ?? 0,
       propertyDate: json['propertyDate'] != null ? DateTime.parse(json['propertyDate']) : DateTime.now(),
       bookingRemaining: json['bookingRemaining'] ?? 0,
+      email: json['email'],
+      phone: json['phone'],
+      names: json['names'],
     );
   }
 }
