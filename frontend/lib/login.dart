@@ -93,6 +93,8 @@ class _MyLoginState extends State<MyLogin> {
     var jsonResponse = jsonDecode(response.body);
     print("JSON response: $jsonResponse");
     if (jsonResponse['status']) {
+      var id= jsonResponse['id'];
+      var email = jsonResponse['email'];
       var myToken = jsonResponse['token'];
       var jwtDecodedToken = JwtDecoder.decode(myToken);
       var userRole = jwtDecodedToken['role'];
@@ -105,6 +107,8 @@ class _MyLoginState extends State<MyLogin> {
           context,
           MaterialPageRoute(
               builder: (context) => Dashboard(
+                id: id,
+                email: email,
                 token: myToken,
                 role: userRole,
                 names: names,

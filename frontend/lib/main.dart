@@ -28,10 +28,14 @@ class MyApp extends StatelessWidget {
   final String? role;
   final String? names;
   final int? phone;
+  final String? id;
+  final String? email;
 
   const MyApp({
     required this.token,
     required this.role,
+    this.id,
+    this.email,
     this.names,
     this.phone,
     Key? key,
@@ -48,15 +52,19 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: (token != null && JwtDecoder.isExpired(token!) == false) ? 'dashboard' : 'login',
       routes: {
-        'login': (context) => MyLogin(),
-        'register': (context) => MyRegister(),
-        'dashboard': (context) => Dashboard(
-          token: token!,
-          role: role!,
-          names: names,
-          phone: phone,
-        ),
-      },
+  'login': (context) => MyLogin(),
+  'register': (context) => MyRegister(),
+  'dashboard': (context) => Dashboard(
+    token: token!,
+    role: role!,
+    names: names,
+    phone: phone,
+    id: id,
+    email: email,
+  ),
+},
     );
   }
 }
+
+

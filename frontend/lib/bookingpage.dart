@@ -9,8 +9,9 @@ class BookingPage extends StatefulWidget {
   final String? names;
   final String? email;
   final int? phone;
+  final String? id;
 
-  BookingPage({required this.booking, this.names, this.phone, this.email});
+  BookingPage({required this.booking, this.id, this.names, this.email, this.phone});
 
   @override
   _BookingPageState createState() => _BookingPageState();
@@ -52,14 +53,27 @@ class _BookingPageState extends State<BookingPage> {
               children: [
                 Text(
                   'Names: ${widget.names ?? 'N/A'}',
-                  style: TextStyle(fontSize: 16),
+                  style: TextStyle(fontSize: 10),
                 ),
-                ElevatedButton(
-                  onPressed: bookProperty,
-                  child: Text('Book Property'),
+                Text(
+                  'Email: ${widget.email ?? 'N/A'}',
+                  style: TextStyle(fontSize: 10),
                 ),
+                Text(
+                  'id: ${widget.id ?? 'N/A'}',
+                  style: TextStyle(fontSize: 10),
+                ),
+                
               ],
             ),
+            ElevatedButton(
+              onPressed: bookProperty,
+              child: Text('Book Property'),
+            ),
+            Text(
+                  'phone: ${widget.phone ?? 'N/A'}',
+                  style: TextStyle(fontSize: 10),
+                ),
           ],
         ),
       ),
@@ -67,52 +81,52 @@ class _BookingPageState extends State<BookingPage> {
   }
 
   void bookProperty() async {
-  final Map<String, dynamic> requestBody = {
-    'propertyName': widget.booking.propertyName,
-    'propertyAddress': widget.booking.propertyAddress,
-    'propertyRent': widget.booking.propertyRent,
-    'propertyType': widget.booking.propertyType,
-    'propertyBalconyCount': widget.booking.propertyBalconyCount,
-    'propertyBedroomCount': widget.booking.propertyBedroomCount,
-    'propertyDate': widget.booking.propertyDate.toString(),
-  };
+    final Map<String, dynamic> requestBody = {
+      'propertyName': widget.booking.propertyName,
+      'propertyAddress': widget.booking.propertyAddress,
+      'propertyRent': widget.booking.propertyRent,
+      'propertyType': widget.booking.propertyType,
+      'propertyBalconyCount': widget.booking.propertyBalconyCount,
+      'propertyBedroomCount': widget.booking.propertyBedroomCount,
+      'propertyDate': widget.booking.propertyDate.toString(),
+    };
 
-  final response = await http.post(
-    Uri.parse('http://localhost:3000/bookings'),
-    headers: {"Content-Type": "application/json"},
-    body: jsonEncode(requestBody),
-  );
+    final response = await http.post(
+      Uri.parse('http://localhost:3000/bookings'),
+      headers: {"Content-Type": "application/json"},
+      body: jsonEncode(requestBody),
+    );
 
-  print('Response status: ${response.statusCode}');
-  print('Response body: ${response.body}');
+    print('Response status: ${response.statusCode}');
+    print('Response body: ${response.body}');
 
-  if (response.statusCode == 201) {
-    var jsonResponse = jsonDecode(response.body);
+    if (response.statusCode == 201) {
+      var jsonResponse = jsonDecode(response.body);
 
-    if (jsonResponse['status']) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Booking successful'),
-          duration: Duration(seconds: 2),
-        ),
-      );
-      // Redirect to ShowPropertyPage after successful booking
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => GetDataPage(),
-        ),
-      );
+      if (jsonResponse['status']) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Booking successful'),
+            duration: Duration(seconds: 2),
+          ),
+        );
+        // Redirect to ShowPropertyPage after successful booking
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => GetDataPage(),
+          ),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Failed to book property'),
+            duration: Duration(seconds: 2),
+          ),
+        );
+      }
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Failed to book property'),
-          duration: Duration(seconds: 2),
-        ),
-      );
+      print('Server responded with status code ${response.statusCode}');
     }
-  } else {
-    print('Server responded with status code ${response.statusCode}');
   }
-}
 }

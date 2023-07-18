@@ -7,11 +7,12 @@ import 'bookingpage.dart';
 import 'showproperty.dart';
 
 class GetDataPage extends StatefulWidget {
+  final String? id;
   final String? names;
   final String? email;
   final int? phone;
 
-  GetDataPage({this.names, this.email, this.phone});
+  GetDataPage({this.id, this.names, this.email, this.phone});
 
   @override
   _GetDataPageState createState() => _GetDataPageState();
@@ -80,9 +81,21 @@ class _GetDataPageState extends State<GetDataPage> {
           : Column(
               children: [
                 Text(
+                  'ID: ${widget.id ?? 'N/A'}',
+                  style: TextStyle(fontSize: 16),
+                ),
+                Text(
                   'Names: ${widget.names ?? 'N/A'}',
                   style: TextStyle(fontSize: 16),
                 ),
+                Text(
+                  'Email: ${widget.email ?? 'N/A'}',
+                  style: TextStyle(fontSize: 16),
+                ),
+                Text(
+                  'Phone: ${widget.phone ?? 'N/A'}',
+                  style: TextStyle(fontSize: 16),
+                ), 
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: TypeAheadField<String>(
@@ -124,6 +137,7 @@ class _GetDataPageState extends State<GetDataPage> {
                         return Container();
                       }
                       return CardList(
+                        id: widget.id,
                         booking: booking,
                         names: widget.names,
                         email: widget.email,
@@ -143,8 +157,9 @@ class CardList extends StatefulWidget {
   final String? names;
   final String? email;
   final int? phone;
+  final String? id;
 
-  CardList({required this.booking, this.email, this.names, this.phone});
+  CardList({required this.booking, this.id, this.email, this.names, this.phone});
 
   @override
   _CardListState createState() => _CardListState();
@@ -202,7 +217,7 @@ class _CardListState extends State<CardList> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => BookingPage(booking: widget.booking, names: widget.names),
+                          builder: (context) => BookingPage(booking: widget.booking, names: widget.names, id: widget.id),
                         ),
                       );
                     },
@@ -222,6 +237,7 @@ class _CardListState extends State<CardList> {
                               names: widget.names,
                               email: widget.email,
                               phone: widget.phone,
+                              id: widget.id,
                             ),
                           ),
                         );

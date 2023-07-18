@@ -10,12 +10,16 @@ class Dashboard extends StatefulWidget {
   final String? role;
   final String? names;
   final int? phone;
+  final String? id;
+  final String? email;
 
   const Dashboard({
     required this.token,
     required this.role,
     required this.names,
     required this.phone,
+    required this.id,
+    required this.email,
     Key? key,
   }) : super(key: key);
 
@@ -24,6 +28,7 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
+  late String id;
   late String email;
   late String names;
   int? phone;
@@ -32,8 +37,9 @@ class _DashboardState extends State<Dashboard> {
   void initState() {
     super.initState();
     Map<String, dynamic> jwtDecodedToken = JwtDecoder.decode(widget.token);
+    id = jwtDecodedToken['_id'];
     email = jwtDecodedToken['email'];
-     names = jwtDecodedToken['names'];
+    names = jwtDecodedToken['names'];
     phone = jwtDecodedToken['phone'];
     print(jwtDecodedToken);
   }
@@ -41,10 +47,15 @@ class _DashboardState extends State<Dashboard> {
   @override
   void didUpdateWidget(Dashboard oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (widget.names != oldWidget.names || widget.phone != oldWidget.phone) {
+    if (widget.names != oldWidget.names ||
+        widget.phone != oldWidget.phone ||
+        widget.id != oldWidget.id ||
+        widget.email != oldWidget.email) {
       setState(() {
-        // names = widget.names;
-        phone = widget.phone;
+        names = widget.names!;
+        phone = widget.phone!;
+        id = widget.id!;
+        email = widget.email!;
       });
     }
   }
@@ -74,9 +85,10 @@ class _DashboardState extends State<Dashboard> {
       context,
       MaterialPageRoute(
         builder: (context) => GetDataPage(
-            names: widget.names,
-          // token: widget.token,
-          // role: widget.role,
+          email: email,
+          names: widget.names,
+          phone: widget.phone,
+          id:id,
         ),
       ),
     );
@@ -167,11 +179,19 @@ class _DashboardState extends State<Dashboard> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
+              'ID: ${id ?? 'N/A'}',
+              style: TextStyle(fontSize: 16),
+            ),
+            Text(
               'Names: ${names ?? 'N/A'}',
               style: TextStyle(fontSize: 16),
             ),
             Text(
               'Phone: ${phone ?? 'N/A'}',
+              style: TextStyle(fontSize: 16),
+            ),
+            Text(
+              'Email: ${email ?? 'N/A'}',
               style: TextStyle(fontSize: 16),
             ),
             _buildDashboardContent(),
