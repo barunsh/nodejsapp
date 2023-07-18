@@ -19,6 +19,24 @@ class UserService {
     }
   }
 
+  static async updateUser(names, phone, email, password, role) {
+    try {
+      // Find the user by their ID and update the fields specified in the updateData object
+      return await UserModel.findByIdAndUpdate(userId, updateData, { new: true });
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  static async deleteUser(_id) {
+    try {
+      // Find the user by their ID and remove them from the database
+      return await UserModel.findByIdAndRemove(userId);
+    } catch (err) {
+      throw err;
+    }
+  }
+
   static async generateToken(tokenData, secretKey, jwt_expire) {
     const { names, phone, ...rest } = tokenData;
     const tokenPayload = { names, phone, ...rest };

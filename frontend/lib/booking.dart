@@ -1,6 +1,6 @@
 class Booking {
-  final String propertyName;
   final String propertyAddress;
+  final String propertyLocality;
   final int propertyRent;
   final String propertyType;
   final int propertyBalconyCount;
@@ -12,8 +12,8 @@ class Booking {
   String? names; // Change from final to regular instance variable
 
   Booking({
-    required this.propertyName,
     required this.propertyAddress,
+    required this.propertyLocality,
     required this.propertyRent,
     required this.propertyType,
     required this.propertyBalconyCount,
@@ -27,8 +27,8 @@ class Booking {
 
   factory Booking.fromJson(Map<String, dynamic> json) {
     return Booking(
-      propertyName: json['propertyName'] ?? '',
       propertyAddress: json['propertyAddress'] ?? '',
+      propertyLocality: json['propertyLocality'] ?? '',
       propertyRent: json['propertyRent'] ?? 0,
       propertyType: json['propertyType'] ?? '',
       propertyBalconyCount: json['propertyBalconyCount'] ?? 0,

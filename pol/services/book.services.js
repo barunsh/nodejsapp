@@ -2,9 +2,9 @@ const BookModel = require('../model/book.model.js');
 
 class BookService {
   // Create a new book
-  static async createBook(userId,propertyName, propertyAddress, propertyRent, propertyType, propertyBalconyCount, propertyBedroomCount, propertyDate) {
+  static async createBook(userId,propertyAddress, propertyLocality, propertyRent, propertyType, propertyBalconyCount, propertyBedroomCount, propertyDate) {
     try {
-      const book = new BookModel({userId, propertyName, propertyAddress, propertyRent, propertyType, propertyBalconyCount, propertyBedroomCount, propertyDate });
+      const book = new BookModel({userId, propertyAddress, propertyLocality, propertyRent, propertyType, propertyBalconyCount, propertyBedroomCount, propertyDate });
       return await book.save();
     } catch (error) {
       throw error;
@@ -21,9 +21,9 @@ class BookService {
   }
 
   // Update a book
-  static async updateBook(bookId, propertyName, propertyAddress, propertyRent, propertyType, propertyBalconyCount, propertyBedroomCount, propertyDate) {
+  static async updateBook(bookId, propertyAddress, propertyLocality, propertyRent, propertyType, propertyBalconyCount, propertyBedroomCount, propertyDate) {
     try {
-      const updatedData = { propertyName, propertyAddress, propertyRent, propertyType, propertyBalconyCount, propertyBedroomCount, propertyDate };
+      const updatedData = { propertyAddress,propertyLocality, propertyRent, propertyType, propertyBalconyCount, propertyBedroomCount, propertyDate };
       return await BookModel.findByIdAndUpdate(bookId, updatedData, { new: true });
     } catch (error) {
       throw error;

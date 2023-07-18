@@ -13,8 +13,8 @@ const Counter = mongoose.model('Counter', counterSchema);
 
 const bookingsSchema = new mongoose.Schema({
   id: { type: Number, unique: true },
-  propertyName: { type: String },
-  propertyAddress: { type: String, required: true },
+  propertyAddress: { type: String,required: true},
+  propertyLocality: { type: String, required: true },
   propertyRent: { type: Number, required: true },
   propertyType: { type: String, required: true },
   propertyBalconyCount: { type: Number, required: true },

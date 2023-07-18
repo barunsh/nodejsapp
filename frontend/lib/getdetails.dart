@@ -25,7 +25,7 @@ class _BookingDetailsState extends State<BookingDetails> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Property Name: ${widget.booking.propertyName}',
+              'Property Address: ${widget.booking.propertyAddress}',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 16,

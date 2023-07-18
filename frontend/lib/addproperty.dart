@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
-import 'booking.dart';
+// import 'booking.dart';
 // import 'dashboard.dart';
 
 class AddPropertyForm extends StatefulWidget {
@@ -19,8 +19,8 @@ class AddPropertyForm extends StatefulWidget {
 final DateFormat formatter = DateFormat('yyyy-MM-dd');
 
 class _AddPropertyFormState extends State<AddPropertyForm> {
-  TextEditingController _propertyNameController = TextEditingController();
   TextEditingController _propertyAddressController = TextEditingController();
+  TextEditingController _propertyLocalityController = TextEditingController();
   TextEditingController _propertyRentController = TextEditingController();
   TextEditingController _bookingRemainingController = TextEditingController();
   DateTime? _selectedDate;
@@ -48,8 +48,8 @@ class _AddPropertyFormState extends State<AddPropertyForm> {
   }
 
   void _submitForm() async {
-    final String propertyName = _propertyNameController.text;
     final String propertyAddress = _propertyAddressController.text;
+    final String propertyLocality = _propertyLocalityController.text;
     final String propertyRent = _propertyRentController.text;
     final String bookingRemaining = _bookingRemainingController.text;
     final String propertyType = _selectedPropertyType;
@@ -58,16 +58,16 @@ class _AddPropertyFormState extends State<AddPropertyForm> {
     final String propertyDate = _selectedDate != null ? formatter.format(_selectedDate!) : '';
 
 
-      if (propertyName.isEmpty) {
+      if (propertyAddress.isEmpty) {
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Please enter property name')),
+      SnackBar(content: Text('Please enter property address')),
     );
     return;
   }
 
-  if (propertyAddress.isEmpty) {
+  if (propertyLocality.isEmpty) {
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Please enter property address')),
+      SnackBar(content: Text('Please enter property locality')),
     );
     return;
   }
@@ -93,8 +93,8 @@ class _AddPropertyFormState extends State<AddPropertyForm> {
   }
 
     final Map<String, String> requestBody = {
-      'propertyName': propertyName,
       'propertyAddress': propertyAddress,
+      'propertyLocality': propertyLocality,
       'propertyRent': propertyRent,
       'bookingRemaining' : bookingRemaining,
       'propertyType': propertyType,
@@ -236,9 +236,9 @@ class _AddPropertyFormState extends State<AddPropertyForm> {
                         borderRadius: BorderRadius.circular(5.0),
                       ),
                       child: TextField(
-                        controller: _propertyNameController,
+                        controller: _propertyAddressController,
                         decoration: InputDecoration(
-                          labelText: 'Property Name',
+                          labelText: 'Property Address',
                           border: InputBorder.none,
                           contentPadding: EdgeInsets.all(10.0),
                         ),
@@ -256,9 +256,9 @@ class _AddPropertyFormState extends State<AddPropertyForm> {
                         borderRadius: BorderRadius.circular(5.0),
                       ),
                       child: TextField(
-                        controller: _propertyAddressController,
+                        controller: _propertyLocalityController,
                         decoration: InputDecoration(
-                          labelText: 'Property Address',
+                          labelText: 'Property Locality',
                           border: InputBorder.none,
                           
                           contentPadding: EdgeInsets.all(10.0),

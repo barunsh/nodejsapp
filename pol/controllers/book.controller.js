@@ -5,8 +5,8 @@ const createBooking = async (req, res, next) => {
   try {
     const {
       userId,
-      propertyName,
       propertyAddress,
+      propertyLocality,
       propertyRent,
       propertyType,
       propertyBalconyCount,
@@ -16,8 +16,8 @@ const createBooking = async (req, res, next) => {
 
     const booking = await BookService.createBook(
       userId,
-      propertyName,
       propertyAddress,
+      propertyLocality,
       propertyRent,
       propertyType,
       propertyBalconyCount,
@@ -45,8 +45,8 @@ const updateBooking = async (req, res, next) => {
   try {
     const {
       bookingId,
-      propertyName,
       propertyAddress,
+      propertyLocality,
       propertyRent,
       propertyType,
       propertyBalconyCount,
@@ -56,8 +56,8 @@ const updateBooking = async (req, res, next) => {
 
     const updatedBooking = await BookService.updateBook(
       bookingId,
-      propertyName,
       propertyAddress,
+      propertyLocality,
       propertyRent,
       propertyType,
       propertyBalconyCount,

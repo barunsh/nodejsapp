@@ -62,9 +62,9 @@ class _GetDataPageState extends State<GetDataPage> {
   List<String> searchBookings(String pattern) {
     return bookings
         .where((booking) =>
-            booking.propertyName.toLowerCase().contains(pattern.toLowerCase()) ||
-            booking.propertyAddress.toLowerCase().contains(pattern.toLowerCase()))
-        .map((booking) => booking.propertyName)
+            booking.propertyAddress.toLowerCase().contains(pattern.toLowerCase()) ||
+            booking.propertyLocality.toLowerCase().contains(pattern.toLowerCase()))
+        .map((booking) => booking.propertyAddress)
         .toList();
   }
 
@@ -132,8 +132,8 @@ class _GetDataPageState extends State<GetDataPage> {
                       final booking = bookings[index];
                       final searchPattern = searchController.text.toLowerCase();
                       if (searchPattern.isNotEmpty &&
-                          !booking.propertyName.toLowerCase().contains(searchPattern) &&
-                          !booking.propertyAddress.toLowerCase().contains(searchPattern)) {
+                          !booking.propertyAddress.toLowerCase().contains(searchPattern) &&
+                          !booking.propertyLocality.toLowerCase().contains(searchPattern)) {
                         return Container();
                       }
                       return CardList(
@@ -196,12 +196,12 @@ class _CardListState extends State<CardList> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               ListTile(
-                title: Text(widget.booking.propertyName),
+                title: Text(widget.booking.propertyAddress),
                 subtitle: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text('Price: Rs. ${widget.booking.propertyRent}'),
-                    Text('Address: ${widget.booking.propertyAddress}'),
+                    Text('Address: ${widget.booking.propertyLocality}'),
                   ],
                 ),
               ),

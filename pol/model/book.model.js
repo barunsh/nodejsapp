@@ -4,8 +4,8 @@ const { Schema } = mongoose;
 
 const bookSchema = new mongoose.Schema({
   userId: {type: String},
-  propertyName: { type: String },
   propertyAddress: { type: String, required: true },
+  propertyLocality: { type: String, required: true },
   propertyRent: { type: Number, required: true },
   propertyType: { type: String, required: true },
   propertyBalconyCount: { type: Number, required: true },

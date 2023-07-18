@@ -9,8 +9,8 @@ const upload = multer({
 // Create a new booking
 exports.createBooking = async (req, res, next) => {
   try {
-    const { propertyName, propertyAddress, propertyRent, propertyType, propertyBalconyCount, propertyBedroomCount, propertyDate } = req.body;
-    const booking = await BookingService.createBooking(propertyName, propertyAddress, propertyRent, propertyType, propertyBalconyCount, propertyBedroomCount, propertyDate);
+    const { propertyAddress, propertyLocality, propertyRent, propertyType, propertyBalconyCount, propertyBedroomCount, propertyDate } = req.body;
+    const booking = await BookingService.createBooking(propertyAddress, propertyLocality, propertyRent, propertyType, propertyBalconyCount, propertyBedroomCount, propertyDate);
     res.status(201).json({ status: true, success: "Booking created successfully", booking });
   } catch (error) {
     next(error);
@@ -31,8 +31,8 @@ exports.getBooking = async (req, res, next) => {
 exports.updateBooking = async (req, res, next) => {
   try {
     const { bookingId } = req.params;
-    const { propertyName, propertyAddress, propertyRent, propertyType, propertyBalconyCount, propertyBedroomCount, propertyDate } = req.body;
-    const booking = await BookingService.updateBooking(bookingId, propertyName, propertyAddress, propertyRent, propertyType, propertyBalconyCount, propertyBedroomCount, propertyDate);
+    const { propertyAddress, propertyLocality, propertyRent, propertyType, propertyBalconyCount, propertyBedroomCount, propertyDate } = req.body;
+    const booking = await BookingService.updateBooking(bookingId, propertyAddress, propertyLocality, propertyRent, propertyType, propertyBalconyCount, propertyBedroomCount, propertyDate);
     res.status(200).json({ status: true, success: "Booking updated successfully", booking });
   } catch (error) {
     next(error);

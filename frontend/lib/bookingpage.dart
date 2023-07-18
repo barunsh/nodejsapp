@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'booking.dart';
 import 'showproperty.dart';
+import 'config.dart';
 
 class BookingPage extends StatefulWidget {
   final Booking booking;
@@ -30,7 +31,7 @@ class _BookingPageState extends State<BookingPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Property Name: ${widget.booking.propertyName}',
+              'Property Address: ${widget.booking.propertyAddress}',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 16,
@@ -83,8 +84,8 @@ class _BookingPageState extends State<BookingPage> {
   void bookProperty() async {
     final Map<String, dynamic> requestBody = {
       'userId': widget.id,
-      'propertyName': widget.booking.propertyName,
       'propertyAddress': widget.booking.propertyAddress,
+      'propertyLocality': widget.booking.propertyLocality,
       'propertyRent': widget.booking.propertyRent,
       'propertyType': widget.booking.propertyType,
       'propertyBalconyCount': widget.booking.propertyBalconyCount,
@@ -93,10 +94,10 @@ class _BookingPageState extends State<BookingPage> {
     };
 
     final response = await http.post(
-      Uri.parse('http://localhost:3000/createBook'),
-      headers: {"Content-Type": "application/json"},
-      body: jsonEncode(requestBody),
-    );
+  Uri.parse('$createBook'),
+  headers: {"Content-Type": "application/json"},
+  body: jsonEncode(requestBody),
+);
 
     print('Response status: ${response.statusCode}');
     print('Response body: ${response.body}');

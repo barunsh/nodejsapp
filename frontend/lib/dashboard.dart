@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'login.dart';
 import 'addproperty.dart';
 import 'showproperty.dart';
+import 'deleteandupdate.dart';
 
 class Dashboard extends StatefulWidget {
   final String token;
@@ -94,6 +95,20 @@ class _DashboardState extends State<Dashboard> {
     );
   }
 
+  void _navigateToDeleteUpdateForm() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => UpdateDeletePage(
+          // email: email,
+          // names: widget.names,
+          // phone: widget.phone,
+          // id:id,
+        ),
+      ),
+    );
+  }
+
   Widget _buildDashboardContent() {
     if (widget.role == 'tenant') {
       return _buildTenantDashboard();
@@ -151,6 +166,10 @@ class _DashboardState extends State<Dashboard> {
           onPressed: _navigateToShowPropertyForm,
           child: Text('Show Property'),
         ),
+        ElevatedButton(
+          onPressed: _navigateToDeleteUpdateForm,
+          child: Text('Update/Delete User'),
+        ),
         SizedBox(height: 20),
         _buildLogoutButton(),
       ],
@@ -201,3 +220,4 @@ class _DashboardState extends State<Dashboard> {
     );
   }
 }
+
