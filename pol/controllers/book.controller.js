@@ -4,6 +4,7 @@ const BookService = require('../services/book.services.js');
 const createBooking = async (req, res, next) => {
   try {
     const {
+      userId,
       propertyName,
       propertyAddress,
       propertyRent,
@@ -14,6 +15,7 @@ const createBooking = async (req, res, next) => {
     } = req.body;
 
     const booking = await BookService.createBook(
+      userId,
       propertyName,
       propertyAddress,
       propertyRent,

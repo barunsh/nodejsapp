@@ -82,6 +82,7 @@ class _BookingPageState extends State<BookingPage> {
 
   void bookProperty() async {
     final Map<String, dynamic> requestBody = {
+      'userId': widget.id,
       'propertyName': widget.booking.propertyName,
       'propertyAddress': widget.booking.propertyAddress,
       'propertyRent': widget.booking.propertyRent,
@@ -92,7 +93,7 @@ class _BookingPageState extends State<BookingPage> {
     };
 
     final response = await http.post(
-      Uri.parse('http://localhost:3000/bookings'),
+      Uri.parse('http://localhost:3000/createBook'),
       headers: {"Content-Type": "application/json"},
       body: jsonEncode(requestBody),
     );

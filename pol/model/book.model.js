@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const bookSchema = new mongoose.Schema({
+  userId: {type: String},
   propertyName: { type: String },
   propertyAddress: { type: String, required: true },
   propertyRent: { type: Number, required: true },
