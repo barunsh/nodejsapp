@@ -74,6 +74,7 @@ class _DashboardState extends State<Dashboard> {
       context,
       MaterialPageRoute(
         builder: (context) => GetDataPage(
+            names: widget.names,
           // token: widget.token,
           // role: widget.role,
         ),

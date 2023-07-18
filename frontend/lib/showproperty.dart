@@ -2,9 +2,9 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:http/http.dart' as http;
-import 'getdetails.dart';
 import 'booking.dart';
 import 'bookingpage.dart';
+import 'showproperty.dart';
 
 class GetDataPage extends StatefulWidget {
   final String? names;
@@ -125,6 +125,9 @@ class _GetDataPageState extends State<GetDataPage> {
                       }
                       return CardList(
                         booking: booking,
+                        names: widget.names,
+                        email: widget.email,
+                        phone: widget.phone,
                       );
                     },
                   ),
@@ -199,7 +202,7 @@ class _CardListState extends State<CardList> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => BookingDetails(booking: widget.booking),
+                          builder: (context) => BookingPage(booking: widget.booking, names: widget.names),
                         ),
                       );
                     },
@@ -216,10 +219,10 @@ class _CardListState extends State<CardList> {
                           MaterialPageRoute(
                             builder: (context) => BookingPage(
                               booking: widget.booking,
+                              names: widget.names,
                               email: widget.email,
-                              // names: widget.names,
                               phone: widget.phone,
-                              ),
+                            ),
                           ),
                         );
                       }

@@ -3,5 +3,5 @@ final registration = url + "registration";
 final login = url + 'login';
 final createBooking = 'bookings';
 final getBooking = 'getbooking';
-final updateBooking = 'updateBooking';
+final createBook = 'createBook';
 final emailphone = 'emailphone';
