@@ -1,15 +1,15 @@
-const BookingService = require('../services/bookings.services.js');
+const PropertyService = require('../services/property.services.js');
 const multer = require('multer');
 const fs = require('fs');
-const BookingsModel = require('../model/bookings.model.js');
+const PropertyModel = require('../model/property.model.js');
 
 // Multer configuration for image uploads
 const upload = multer({
   dest: 'uploads/', // Set the destination folder where files will be stored
 });
 
-// Create a new booking
-exports.createBooking = async (req, res, next) => {
+// Create a new property
+exports.createProperty = async (req, res, next) => {
   try {
     const {
       propertyAddress,
@@ -25,7 +25,7 @@ exports.createBooking = async (req, res, next) => {
     console.log("CHECK MEEEE",req.body);
 
 
-    const booking = await BookingService.createBooking(
+    const property = await PropertyService.createProperty(
       propertyAddress,
       propertyLocality,
       propertyRent,
@@ -38,26 +38,26 @@ exports.createBooking = async (req, res, next) => {
       // Remove "path" from the parameters as it's not used here.
     );
 
-    res.status(201).json({ status: true, success: "Property added  successfully", booking });
+    res.status(201).json({ status: true, success: "Property added  successfully", property });
   } catch (error) {
     next(error);
   }
 };
 
-// Retrieve all bookings
-exports.getBooking = async (req, res, next) => {
+// Retrieve all properties
+exports.getProperty = async (req, res, next) => {
   try {
-    const booking = await BookingService.getBooking();
-    res.status(200).json({ status: true, booking });
+    const property = await PropertyService.getProperty();
+    res.status(200).json({ status: true, property });
   } catch (error) {
     next(error);
   }
 };
 
-// Update a booking
-exports.updateBooking = async (req, res, next) => {
+// Update a property
+exports.updateProperty = async (req, res, next) => {
   try {
-    const { bookingId } = req.params;
+    const { propertyId } = req.params;
     const {
       propertyAddress,
       propertyLocality,
@@ -69,8 +69,8 @@ exports.updateBooking = async (req, res, next) => {
       propertyImage,
     } = req.body;
 
-    const booking = await BookingService.updateBooking(
-      bookingId,
+    const property = await PropertyService.updateProperty(
+      propertyId,
       propertyAddress,
       propertyLocality,
       propertyRent,
@@ -81,18 +81,18 @@ exports.updateBooking = async (req, res, next) => {
       propertyImage
     );
 
-    res.status(200).json({ status: true, success: "Booking updated successfully", booking });
+    res.status(200).json({ status: true, success: "Property updated successfully", property });
   } catch (error) {
     next(error);
   }
 };
 
-// Delete a booking
-exports.deleteBooking = async (req, res, next) => {
+// Delete a property
+exports.deleteProperty = async (req, res, next) => {
   try {
-    const { bookingId } = req.params;
-    await BookingService.deleteBooking(bookingId);
-    res.status(200).json({ status: true, success: "Booking deleted successfully" });
+    const { propertyId } = req.params;
+    await PropertyService.deleteProperty(propertyId);
+    res.status(200).json({ status: true, success: "Property deleted successfully" });
   } catch (error) {
     next(error);
   }
@@ -101,6 +101,13 @@ exports.deleteBooking = async (req, res, next) => {
 // Variable to keep track of the image count
 let imageCount = 0;
 
+exports.getImageCount = () => {
+  return imageCount;
+};
+
+exports.incrementImageCount = () => {
+  imageCount++;
+};
 // Upload an image
 exports.uploadImage = async (req, res, next) => {
   try {

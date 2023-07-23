@@ -1,16 +1,16 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const userRouter = require('./routers/user.router');
-const bookingsRouter = require('./routers/bookings.router');
+const propertyRouter = require('./routers/property.router');
 const bookRouter = require('./routers/book.router');
 const cors = require('cors');
 
-// Import your Bookings model
-const Bookings = require('./model/bookings.model'); // Replace this with the correct path to your Bookings model
+// Import your Property model
+const Property = require('./model/property.model'); // Replace this with the correct path to your property model
 
 const multer = require('multer');
 const sharp = require('sharp');
-const controller = require('./controllers/bookings.controller'); // Import the bookings controller
+const controller = require('./controllers/property.controller'); // Import the property controller
 
 const storage = multer.memoryStorage();
 const upload = multer({
@@ -31,7 +31,7 @@ app.post('/upload', upload.single('image'), controller.uploadImage);
 app.use(cors({ origin: '*' }));
 
 app.use('/', userRouter);
-app.use('/', bookingsRouter);
+app.use('/', propertyRouter);
 app.use('/', bookRouter);
 
 module.exports = app;

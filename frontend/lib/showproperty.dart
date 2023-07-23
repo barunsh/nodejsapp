@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:http/http.dart' as http;
-import 'booking.dart';
+import 'property.dart';
 import 'bookingpage.dart';
 
 class GetDataPage extends StatefulWidget {
@@ -19,7 +19,7 @@ class GetDataPage extends StatefulWidget {
 
 
 class _GetDataPageState extends State<GetDataPage> {
-  List<Booking> bookings = [];
+  List<Property> properties = [];
   bool isLoading = true;
   TextEditingController searchController = TextEditingController();
 
@@ -35,17 +35,17 @@ class _GetDataPageState extends State<GetDataPage> {
     });
 
     try {
-      final response = await http.get(Uri.parse('http://localhost:3000/getbooking'));
+      final response = await http.get(Uri.parse('http://localhost:3000/getProperty'));
       if (response.statusCode == 200) {
         final jsonData = jsonDecode(response.body);
-        if (jsonData['status'] == true && jsonData['booking'] is List) {
+        if (jsonData['status'] == true && jsonData['property'] is List) {
           setState(() {
-            bookings = (jsonData['booking'] as List<dynamic>)
-                .map((item) => Booking.fromJson(item))
+            properties = (jsonData['property'] as List<dynamic>)
+                .map((item) => Property.fromJson(item))
                 .toList();
           });
         } else {
-          print('Invalid response format or no booking data');
+          print('Invalid response format or no property data');
         }
       } else {
         print('Failed to fetch data: ${response.reasonPhrase}');
@@ -59,12 +59,12 @@ class _GetDataPageState extends State<GetDataPage> {
     }
   }
 
-  List<String> searchBookings(String pattern) {
-    return bookings
-        .where((booking) =>
-            booking.propertyAddress.toLowerCase().contains(pattern.toLowerCase()) ||
-            booking.propertyLocality.toLowerCase().contains(pattern.toLowerCase()))
-        .map((booking) => booking.propertyAddress)
+  List<String> searchProperties(String pattern) {
+    return properties
+        .where((property) =>
+            property.propertyAddress.toLowerCase().contains(pattern.toLowerCase()) ||
+            property.propertyLocality.toLowerCase().contains(pattern.toLowerCase()))
+        .map((property) => property.propertyAddress)
         .toList();
   }
 
@@ -110,7 +110,7 @@ class _GetDataPageState extends State<GetDataPage> {
                       ),
                     ),
                     suggestionsCallback: (pattern) async {
-                      return searchBookings(pattern);
+                      return searchProperties(pattern);
                     },
                     itemBuilder: (context, suggestion) {
                       return ListTile(
@@ -127,18 +127,18 @@ class _GetDataPageState extends State<GetDataPage> {
                 ),
                 Expanded(
                   child: ListView.builder(
-                    itemCount: bookings.length,
+                    itemCount: properties.length,
                     itemBuilder: (context, index) {
-                      final booking = bookings[index];
+                      final property = properties[index];
                       final searchPattern = searchController.text.toLowerCase();
                       if (searchPattern.isNotEmpty &&
-                          !booking.propertyAddress.toLowerCase().contains(searchPattern) &&
-                          !booking.propertyLocality.toLowerCase().contains(searchPattern)) {
+                          !property.propertyAddress.toLowerCase().contains(searchPattern) &&
+                          !property.propertyLocality.toLowerCase().contains(searchPattern)) {
                         return Container();
                       }
                       return CardList(
                         id: widget.id,
-                        booking: booking,
+                        property: property,
                         names: widget.names,
                         email: widget.email,
                         phone: widget.phone,
@@ -153,13 +153,13 @@ class _GetDataPageState extends State<GetDataPage> {
 }
 
 class CardList extends StatefulWidget {
-  final Booking booking;
+  final Property property;
   final String? names;
   final String? email;
   final String? phone;
   final String? id;
 
-  CardList({required this.booking, this.id, this.email, this.names, this.phone});
+  CardList({required this.property, this.id, this.email, this.names, this.phone});
 
   @override
   _CardListState createState() => _CardListState();
@@ -175,7 +175,7 @@ class _CardListState extends State<CardList> {
   }
 
   void checkBookingFull() {
-    if (widget.booking.bookingRemaining <= 0) {
+    if (widget.property.bookingRemaining <= 0) {
       setState(() {
         isBookingFull = true;
       });
@@ -196,12 +196,12 @@ class _CardListState extends State<CardList> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               ListTile(
-                title: Text(widget.booking.propertyAddress),
+                title: Text(widget.property.propertyAddress),
                 subtitle: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Price: Rs. ${widget.booking.propertyRent}'),
-                    Text('Address: ${widget.booking.propertyLocality}'),
+                    Text('Price: Rs. ${widget.property.propertyRent}'),
+                    Text('Address: ${widget.property.propertyLocality}'),
                   ],
                 ),
               ),
@@ -217,7 +217,7 @@ class _CardListState extends State<CardList> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => BookingPage(booking: widget.booking, names: widget.names, id: widget.id),
+                          builder: (context) => BookingPage(property: widget.property, names: widget.names, id: widget.id),
                         ),
                       );
                     },
@@ -233,7 +233,7 @@ class _CardListState extends State<CardList> {
                           context,
                           MaterialPageRoute(
                             builder: (context) => BookingPage(
-                              booking: widget.booking,
+                              property: widget.property,
                               names: widget.names,
                               email: widget.email,
                               phone: widget.phone,

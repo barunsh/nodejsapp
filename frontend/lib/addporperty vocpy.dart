@@ -23,7 +23,7 @@ class _AddPropertyFormState extends State<AddPropertyForm> {
   TextEditingController _propertyAddressController = TextEditingController();
   TextEditingController _propertyLocalityController = TextEditingController();
   TextEditingController _propertyRentController = TextEditingController();
-  TextEditingController _bookingRemainingController = TextEditingController();
+  TextEditingController _RemainingController = TextEditingController();
   TextEditingController _propertyImageController = TextEditingController(); // New TextEditingController
   DateTime? _selectedDate;
   String _selectedPropertyType = '';
@@ -77,7 +77,7 @@ class _AddPropertyFormState extends State<AddPropertyForm> {
     final String propertyAddress = _propertyAddressController.text;
     final String propertyLocality = _propertyLocalityController.text;
     final String propertyRent = _propertyRentController.text;
-    final String bookingRemaining = _bookingRemainingController.text;
+    final String Remaining = _RemainingController.text;
     final String propertyType = _selectedPropertyType;
     final String balconyCount = _selectedBalcony.toString();
     final String bedroomCount = _selectedBedroom.toString();
@@ -135,7 +135,7 @@ class _AddPropertyFormState extends State<AddPropertyForm> {
       'propertyAddress': propertyAddress,
       'propertyLocality': propertyLocality,
       'propertyRent': propertyRent,
-      'bookingRemaining': bookingRemaining,
+      'Remaining': Remaining,
       'propertyType': propertyType,
       'propertyBalconyCount': balconyCount,
       'propertyBedroomCount': bedroomCount,
@@ -144,7 +144,7 @@ class _AddPropertyFormState extends State<AddPropertyForm> {
     };
 
     final response = await http.post(
-      Uri.parse('$createBooking'),
+      Uri.parse('$createProperty'),
       headers: {"Content-Type": "application/json"},
       body: jsonEncode(requestBody),
     );
@@ -455,7 +455,7 @@ class _AddPropertyFormState extends State<AddPropertyForm> {
                 ],
               ),
               Text(
-                'Booking Remaining',
+                ' Remaining',
                 style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 10.0),
@@ -468,10 +468,10 @@ class _AddPropertyFormState extends State<AddPropertyForm> {
                   borderRadius: BorderRadius.circular(5.0),
                 ),
                 child: TextField(
-                  controller: _bookingRemainingController,
+                  controller: _RemainingController,
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(
-                    labelText: 'Booking Remaining',
+                    labelText: ' Remaining',
                     border: InputBorder.none,
                     contentPadding: EdgeInsets.all(10.0),
                   ),

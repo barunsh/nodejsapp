@@ -1,18 +1,18 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
-import 'booking.dart';
+import 'property.dart';
 import 'showproperty.dart';
 import 'config.dart';
 
 class BookingPage extends StatefulWidget {
-  final Booking booking;
+  final Property property;
   final String? names;
   final String? email;
   final String? phone;
   final String? id;
 
-  BookingPage({required this.booking, this.id, this.names, this.email, this.phone});
+  BookingPage({required this.property, this.id, this.names, this.email, this.phone});
 
   @override
   _BookingPageState createState() => _BookingPageState();
@@ -31,24 +31,24 @@ class _BookingPageState extends State<BookingPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Property Address: ${widget.booking.propertyAddress}',
+              'Property Address: ${widget.property.propertyAddress}',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 16,
               ),
             ),
             SizedBox(height: 8),
-            Text('Property Address: ${widget.booking.propertyAddress}'),
+            Text('Property Address: ${widget.property.propertyAddress}'),
             SizedBox(height: 8),
-            Text('Property Rent: Rs. ${widget.booking.propertyRent}'),
+            Text('Property Rent: Rs. ${widget.property.propertyRent}'),
             SizedBox(height: 8),
-            Text('Property Type: ${widget.booking.propertyType}'),
+            Text('Property Type: ${widget.property.propertyType}'),
             SizedBox(height: 8),
-            Text('Property Balcony Count: ${widget.booking.propertyBalconyCount}'),
+            Text('Property Balcony Count: ${widget.property.propertyBalconyCount}'),
             SizedBox(height: 8),
-            Text('Property Bedroom Count: ${widget.booking.propertyBedroomCount}'),
+            Text('Property Bedroom Count: ${widget.property.propertyBedroomCount}'),
             SizedBox(height: 8),
-            Text('Property Date: ${widget.booking.propertyDate.toString()}'),
+            Text('Property Date: ${widget.property.propertyDate.toString()}'),
             SizedBox(height: 16),
             Row(
               children: [
@@ -85,13 +85,13 @@ class _BookingPageState extends State<BookingPage> {
     final Map<String, dynamic> requestBody = {
       'userId': widget.id,
       'userName': widget.names,
-      'propertyAddress': widget.booking.propertyAddress,
-      'propertyLocality': widget.booking.propertyLocality,
-      'propertyRent': widget.booking.propertyRent,
-      'propertyType': widget.booking.propertyType,
-      'propertyBalconyCount': widget.booking.propertyBalconyCount,
-      'propertyBedroomCount': widget.booking.propertyBedroomCount,
-      'propertyDate': widget.booking.propertyDate.toString(),
+      'propertyAddress': widget.property.propertyAddress,
+      'propertyLocality': widget.property.propertyLocality,
+      'propertyRent': widget.property.propertyRent,
+      'propertyType': widget.property.propertyType,
+      'propertyBalconyCount': widget.property.propertyBalconyCount,
+      'propertyBedroomCount': widget.property.propertyBedroomCount,
+      'propertyDate': widget.property.propertyDate.toString(),
     };
 
     final response = await http.post(

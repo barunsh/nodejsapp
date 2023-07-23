@@ -35,7 +35,7 @@
 //     const savedImage = await image.save();
 
 //     // Associate the image with the booking
-//     const bookingId = req.body.bookingId; // Assuming you pass the bookingId from the frontend
+//     const propertyId = req.body.bookingId; // Assuming you pass the bookingId from the frontend
 //     const booking = await Bookings.findById(bookingId);
 //     booking.propertyImage = savedImage;
 //     await booking.save();

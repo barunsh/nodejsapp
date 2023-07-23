@@ -2,8 +2,7 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 
-const bookingsSchema = new mongoose.Schema({
-  id: { type: Number, unique: true },
+const propertySchema = new mongoose.Schema({
   propertyAddress: { type: String, required: true },
   propertyLocality: { type: String, required: true },
   propertyRent: { type: Number, required: true },
@@ -16,10 +15,9 @@ const bookingsSchema = new mongoose.Schema({
     contentType: String
   },
   bookingRemaining: { type: Number, default: 3 },
-  ownerId: { type: Schema.Types.ObjectId, ref: 'User' },
   ownerName: {type: String},
 });
 
 // Middleware to auto-increment the ID before saving (remains unchanged)
 
-module.exports = mongoose.model('Bookings', bookingsSchema);
+module.exports = mongoose.model('Property', propertySchema);

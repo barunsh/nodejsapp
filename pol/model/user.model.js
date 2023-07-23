@@ -4,12 +4,12 @@ const bcrypt = require('bcrypt');
 const { Schema } = mongoose;
 
 const userSchema = new Schema({
-  id: {
-    type: Number,
-    required: true,
-    unique: true,
-    default: 1, // Set the default value to 1
-  },
+  // id: {
+  //   type: Number,
+  //   required: true,
+  //   unique: true,
+  //   default: 1, // Set the default value to 1
+  // },
   names: {
     type: String,
     required: true,

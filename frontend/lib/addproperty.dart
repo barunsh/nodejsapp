@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
+import 'package:majorproject/showimage.dart';
 import 'config.dart';
 import 'user.dart';
 
@@ -175,7 +176,7 @@ class _AddPropertyFormState extends State<AddPropertyForm> {
 
 
     final response = await http.post(
-      Uri.parse('$createBooking'),
+      Uri.parse('$createProperty'),
       headers: {"Content-Type": "application/json"},
       body: jsonEncode(requestBody),
     );
@@ -194,10 +195,11 @@ class _AddPropertyFormState extends State<AddPropertyForm> {
           ),
         );
 
-        // Call uploadImage with the newly created booking ID
-        final bookingId = jsonResponse['booking']['_id']; 
+        // Call uploadImage with the newly created property ID
+        final propertyId = jsonResponse['property']['_id']; 
         // print(bookingId);// Assuming the response has the booking ID
-        await _uploadImage(bookingId);
+        await _uploadImage(propertyId);
+        print(propertyId);
 
         Navigator.pushNamed(
           context,
@@ -218,13 +220,13 @@ class _AddPropertyFormState extends State<AddPropertyForm> {
     }
   }
 
-  Future<void> _uploadImage(String bookingId) async {
+  Future<void> _uploadImage(String propertyId) async {
     try {
       final imageBytes = await _propertyImage!.readAsBytes();
       final imageBase64 = base64Encode(imageBytes);
 
       final requestBody = {
-        'bookingId': bookingId,
+        'propertyId': propertyId,
         'imageBase64': imageBase64,
       };
 
