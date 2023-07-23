@@ -113,12 +113,8 @@ class _BookingPageState extends State<BookingPage> {
           ),
         );
         // Redirect to ShowPropertyPage after successful booking
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => GetDataPage(),
-          ),
-        );
+      Navigator.pop(context);
+
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(

@@ -1,10 +1,22 @@
 const BookingsModel = require('../model/bookings.model.js');
 
-class BookingsService {
+class BookingService {
   // Create a new booking
-  static async createBooking(propertyAddress, propertyLocality, propertyRent, propertyType, propertyBalconyCount, propertyBedroomCount, propertyDate) {
+  static async createBooking(propertyAddress, propertyLocality, propertyRent, propertyType, propertyBalconyCount, propertyBedroomCount, propertyDate, propertyImageBase64, propertyImagePath) {
     try {
-      const booking = new BookingsModel({ propertyAddress, propertyLocality, propertyRent, propertyType, propertyBalconyCount, propertyBedroomCount, propertyDate });
+      const booking = new BookingsModel({
+        propertyAddress,
+        propertyLocality,
+        propertyRent,
+        propertyType,
+        propertyBalconyCount,
+        propertyBedroomCount,
+        propertyDate,
+        propertyImage:{
+          data: propertyImageBase64,
+          contentType: 'image/jpg',
+        },
+      });
       return await booking.save();
     } catch (error) {
       throw error;
@@ -21,9 +33,9 @@ class BookingsService {
   }
 
   // Update a booking
-  static async updateBooking(bookingId, propertyAddress, propertyLocality, propertyRent, propertyType, propertyBalconyCount, propertyBedroomCount, propertyDate) {
+  static async updateBooking(bookingId, propertyAddress, propertyLocality, propertyRent, propertyType, propertyBalconyCount, propertyBedroomCount, propertyDate, propertyImage) {
     try {
-      const updatedData = { propertyAddress, propertyLocality, propertyRent, propertyType, propertyBalconyCount, propertyBedroomCount, propertyDate };
+      const updatedData = { propertyAddress, propertyLocality, propertyRent, propertyType, propertyBalconyCount, propertyBedroomCount, propertyDate, propertyImage };
       return await BookingsModel.findByIdAndUpdate(bookingId, updatedData, { new: true });
     } catch (error) {
       throw error;
@@ -40,4 +52,4 @@ class BookingsService {
   }
 }
 
-module.exports = BookingsService;
+module.exports = BookingService;

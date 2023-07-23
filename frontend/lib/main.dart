@@ -13,6 +13,7 @@ void main() async {
   final userRole = jwtDecodedToken != null ? jwtDecodedToken['role'] : null;
   final names = jwtDecodedToken != null ? jwtDecodedToken['names'] : null;
   final phone = jwtDecodedToken != null ? jwtDecodedToken['phone'] : null;
+  // print('user toiken: $userToken');
 
   print('JSON response: $jwtDecodedToken');
   runApp(MyApp(

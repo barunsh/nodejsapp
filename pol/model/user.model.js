@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const bcrypt = require("bcrypt");
+const bcrypt = require('bcrypt');
 
 const { Schema } = mongoose;
 
@@ -7,8 +7,8 @@ const userSchema = new Schema({
   id: {
     type: Number,
     required: true,
-    unique: true,
-    default: 1, // Set the default value to 1
+    // unique: true,
+    // default: 1, // Set the default value to 1
   },
   names: {
     type: String,
@@ -35,18 +35,21 @@ const userSchema = new Schema({
   }
 });
 
-userSchema.pre('save', async function(){
+userSchema.pre('save', async function (next) {
   try {
-    var user = this;
-    const salt = await (bcrypt.genSalt(10));
-    const hashpass = await bcrypt.hash(user.password,salt);
+    const user = this;
+    if (!user.isModified('password')) return next();
+
+    const salt = await bcrypt.genSalt(10);
+    const hashpass = await bcrypt.hash(user.password, salt);
     user.password = hashpass;
-  } catch(error) {
-    throw error;
+    return next();
+  } catch (error) {
+    return next(error);
   }
 });
 
-userSchema.methods.comparePassword = async function(userPassword){
+userSchema.methods.comparePassword = async function (userPassword) {
   try {
     const isMatch = await bcrypt.compare(userPassword, this.password);
     return isMatch;
@@ -57,4 +60,4 @@ userSchema.methods.comparePassword = async function(userPassword){
 
 const UserModel = mongoose.model('User', userSchema);
 
-module.exports = { UserModel};
+module.exports = UserModel;

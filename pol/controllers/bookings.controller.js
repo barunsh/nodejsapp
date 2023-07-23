@@ -1,5 +1,7 @@
 const BookingService = require('../services/bookings.services.js');
 const multer = require('multer');
+const fs = require('fs');
+const BookingsModel = require('../model/bookings.model.js');
 
 // Multer configuration for image uploads
 const upload = multer({
@@ -9,8 +11,33 @@ const upload = multer({
 // Create a new booking
 exports.createBooking = async (req, res, next) => {
   try {
-    const { propertyAddress, propertyLocality, propertyRent, propertyType, propertyBalconyCount, propertyBedroomCount, propertyDate } = req.body;
-    const booking = await BookingService.createBooking(propertyAddress, propertyLocality, propertyRent, propertyType, propertyBalconyCount, propertyBedroomCount, propertyDate);
+    const {
+      propertyAddress,
+      propertyLocality,
+      propertyRent,
+      propertyType,
+      propertyBalconyCount,
+      propertyBedroomCount,
+      propertyDate,
+      propertyImageBase64,
+    } = req.body;
+    // console.log("CHECK MEEEE",req.body);
+
+    // Note: req.file will be undefined here as we are not uploading an image in createBooking.
+    // const { path, originalname } = req.file || {};
+
+    const booking = await BookingService.createBooking(
+      propertyAddress,
+      propertyLocality,
+      propertyRent,
+      propertyType,
+      propertyBalconyCount,
+      propertyBedroomCount,
+      propertyDate,
+      propertyImageBase64
+      // Remove "path" from the parameters as it's not used here.
+    );
+
     res.status(201).json({ status: true, success: "Booking created successfully", booking });
   } catch (error) {
     next(error);
@@ -31,8 +58,29 @@ exports.getBooking = async (req, res, next) => {
 exports.updateBooking = async (req, res, next) => {
   try {
     const { bookingId } = req.params;
-    const { propertyAddress, propertyLocality, propertyRent, propertyType, propertyBalconyCount, propertyBedroomCount, propertyDate } = req.body;
-    const booking = await BookingService.updateBooking(bookingId, propertyAddress, propertyLocality, propertyRent, propertyType, propertyBalconyCount, propertyBedroomCount, propertyDate);
+    const {
+      propertyAddress,
+      propertyLocality,
+      propertyRent,
+      propertyType,
+      propertyBalconyCount,
+      propertyBedroomCount,
+      propertyDate,
+      propertyImage,
+    } = req.body;
+
+    const booking = await BookingService.updateBooking(
+      bookingId,
+      propertyAddress,
+      propertyLocality,
+      propertyRent,
+      propertyType,
+      propertyBalconyCount,
+      propertyBedroomCount,
+      propertyDate,
+      propertyImage
+    );
+
     res.status(200).json({ status: true, success: "Booking updated successfully", booking });
   } catch (error) {
     next(error);
@@ -50,17 +98,36 @@ exports.deleteBooking = async (req, res, next) => {
   }
 };
 
+// Variable to keep track of the image count
+let imageCount = 0;
+
 // Upload an image
 exports.uploadImage = async (req, res, next) => {
   try {
-    const { bookingId } = req.params; // Assuming you pass the bookingId as a route parameter
-    const { path, originalname } = req.file; // Assuming you use multer to handle file uploads
+    if (!req.file) {
+      return res.status(400).json({ status: false, message: 'No image provided' });
+    }
 
-    // Implement your logic to store the image in MongoDB using the BookingService or any other appropriate service
-    // Example: await BookingService.uploadImage(bookingId, path, originalname);
+    const { path, originalname } = req.file;
+
+    console.log('Original File Name:', originalname);
+    console.log('File Path:', path);
+
+    // Create a unique filename by appending the image count to a prefix (e.g., "image_1.jpg", "image_2.jpg", etc.)
+    const imageFileName = `image_${imageCount}.jpg`;
+
+    // Move the uploaded image to the 'uploads' folder with the unique filename
+    const newPath = `uploads/${imageFileName}`;
+    fs.renameSync(path, newPath);
+
+    // Increment the image count for the next uploaded image
+    imageCount++;
+
+    // You can perform any other image-related operations here, if needed.
 
     res.status(200).json({ status: true, message: 'Image uploaded successfully' });
   } catch (error) {
+    console.error(error);
     next(error);
   }
 };

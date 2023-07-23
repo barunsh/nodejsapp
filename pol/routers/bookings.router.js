@@ -4,6 +4,5 @@ const BookController = require('../controllers/book.controller.js');
 
 router.post('/bookings', BookingsController.createBooking);
 router.get('/getbooking' , BookingsController.getBooking);
-router.post('/createBook', BookController.createBooking);
-router.post('/upload', BookingsController.uploadImage);
+router.post('/uploadImage', BookingsController.uploadImage);
 module.exports = router;

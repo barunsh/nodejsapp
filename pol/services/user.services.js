@@ -1,4 +1,4 @@
-const { UserModel } = require('../model/user.model.js');
+const UserModel = require('../model/user.model.js');
 const jwt = require('jsonwebtoken');
 
 class UserService {
@@ -19,16 +19,36 @@ class UserService {
     }
   }
 
-  static async updateUser(names, phone, email, password, role) {
+  static async getUser() {
     try {
-      // Find the user by their ID and update the fields specified in the updateData object
+      return await UserModel.find();
+    } catch (error) {
+      console.log('Error fetching users');
+      throw error;
+    }
+  }
+
+  static async updateUser(userId, names, phone, email, role) {
+    try {
+      console.log("look:", userId); 
+      console.log(names);
+      // Assuming updateData is an object with the properties to update
+      const updateData = {
+        names,
+        phone,
+        email,
+        role,
+      };
+      console.log("Asdasd", updateData);
+
+      // Use findByIdAndUpdate to update the user document by ID
       return await UserModel.findByIdAndUpdate(userId, updateData, { new: true });
     } catch (err) {
       throw err;
     }
   }
 
-  static async deleteUser(_id) {
+  static async deleteUser(userId) {
     try {
       // Find the user by their ID and remove them from the database
       return await UserModel.findByIdAndRemove(userId);

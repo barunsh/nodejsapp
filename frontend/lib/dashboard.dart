@@ -5,6 +5,7 @@ import 'login.dart';
 import 'addproperty.dart';
 import 'showproperty.dart';
 import 'deleteandupdate.dart';
+// import 'updatepage.dart';
 
 class Dashboard extends StatefulWidget {
   final String token;
@@ -95,15 +96,15 @@ class _DashboardState extends State<Dashboard> {
     );
   }
 
-  void _navigateToDeleteUpdateForm() {
+  void _navigateToUpdateDeleteForm() {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => UpdateDeletePage(
-          // email: email,
-          // names: widget.names,
-          // phone: widget.phone,
-          // id:id,
+        builder: (context) => DeleteUpdate(
+          email: email,
+          names: widget.names,
+          phone: widget.phone,
+          id:id,
         ),
       ),
     );
@@ -167,7 +168,7 @@ class _DashboardState extends State<Dashboard> {
           child: Text('Show Property'),
         ),
         ElevatedButton(
-          onPressed: _navigateToDeleteUpdateForm,
+          onPressed: _navigateToUpdateDeleteForm,
           child: Text('Update/Delete User'),
         ),
         SizedBox(height: 20),
@@ -220,4 +221,3 @@ class _DashboardState extends State<Dashboard> {
     );
   }
 }
-

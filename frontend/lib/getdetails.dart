@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 // import 'showproperty.dart';
 // import 'package:jwt_decoder/jwt_decoder.dart';
 import 'booking.dart';
+import 'config.dart';
 
 class BookingDetails extends StatefulWidget {
   final Booking booking;

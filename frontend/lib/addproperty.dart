@@ -2,8 +2,9 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
-// import 'booking.dart';
-// import 'dashboard.dart';
+import 'dart:io';
+import 'package:image_picker/image_picker.dart';
+import 'config.dart';
 
 class AddPropertyForm extends StatefulWidget {
   final String? token;
@@ -23,10 +24,12 @@ class _AddPropertyFormState extends State<AddPropertyForm> {
   TextEditingController _propertyLocalityController = TextEditingController();
   TextEditingController _propertyRentController = TextEditingController();
   TextEditingController _bookingRemainingController = TextEditingController();
+  TextEditingController _propertyImageController = TextEditingController(); // New TextEditingController
   DateTime? _selectedDate;
   String _selectedPropertyType = '';
   int _selectedBalcony = 1;
   int _selectedBedroom = 1;
+  File? _propertyImage;
 
   void _presentDatePicker() {
     showDatePicker(
@@ -37,14 +40,37 @@ class _AddPropertyFormState extends State<AddPropertyForm> {
     ).then((pickedDate) {
       if (pickedDate == null) {
         ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Please select a date')),
-    );
+          SnackBar(content: Text('Please select a date')),
+        );
         return;
       }
       setState(() {
         _selectedDate = pickedDate;
       });
     });
+  }
+
+  void _selectImage() async {
+    try {
+      final imagePicker = ImagePicker();
+      final pickedImage = await imagePicker.pickImage(source: ImageSource.gallery);
+
+      if (pickedImage == null) {
+        return;
+      }
+
+      setState(() {
+        _propertyImage = File(pickedImage.path);
+        _propertyImageController.text = pickedImage.path;
+      });
+      print('selected image path: ${pickedImage.path}');
+      print('selected image file: $pickedImage');
+    } catch (e) {
+      print('Error selecting image: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error selecting image. Please try again')),
+      );
+    }
   }
 
   void _submitForm() async {
@@ -57,90 +83,143 @@ class _AddPropertyFormState extends State<AddPropertyForm> {
     final String bedroomCount = _selectedBedroom.toString();
     final String propertyDate = _selectedDate != null ? formatter.format(_selectedDate!) : '';
 
+    String imageBase64 = '';
+    if (_propertyImage != null) {
+      try {
+        List<int> imageBytes = await _propertyImage!.readAsBytes();
+        imageBase64 = base64Encode(imageBytes);
+      } catch (e) {
+        print('Error converting image to base64: $e');
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error uploading image. Please try again.')),
+        );
+        return;
+      }
+    }
 
-      if (propertyAddress.isEmpty) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Please enter property address')),
-    );
-    return;
-  }
+    if (propertyAddress.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Please enter property address')),
+      );
+      return;
+    }
 
-  if (propertyLocality.isEmpty) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Please enter property locality')),
-    );
-    return;
-  }
+    if (propertyLocality.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Please enter property locality')),
+      );
+      return;
+    }
 
-  if (propertyRent.isEmpty) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Please enter property rent')),
-    );
-    return;
-  }
+    if (propertyRent.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Please enter property rent')),
+      );
+      return;
+    }
 
-  if (propertyType.isEmpty) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Please select a property type')),
-    );
-    return;
-  }
-  if (_selectedDate == null) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Please select a date')),
-    );
-    return;
-  }
+    if (propertyType.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Please select a property type')),
+      );
+      return;
+    }
+    if (_selectedDate == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Please select a date')),
+      );
+      return;
+    }
 
     final Map<String, String> requestBody = {
       'propertyAddress': propertyAddress,
       'propertyLocality': propertyLocality,
       'propertyRent': propertyRent,
-      'bookingRemaining' : bookingRemaining,
+      'bookingRemaining': bookingRemaining,
       'propertyType': propertyType,
       'propertyBalconyCount': balconyCount,
       'propertyBedroomCount': bedroomCount,
       'propertyDate': propertyDate,
+      'propertyImageBase64': imageBase64,
     };
 
     final response = await http.post(
-      Uri.parse('http://localhost:3000/bookings'),
+      Uri.parse('$createBooking'),
       headers: {"Content-Type": "application/json"},
       body: jsonEncode(requestBody),
     );
 
-
     print('Response status: ${response.statusCode}');
     print('Response body: ${response.body}');
-
 
     if (response.statusCode == 201) {
       var jsonResponse = jsonDecode(response.body);
 
-      if(jsonResponse['status']){
-        // String names  = jsonResponse['names'];
+      if (jsonResponse['status']) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content:Text('Property successfully added'),
+            content: Text('Property successfully added'),
             duration: Duration(seconds: 3),
           ),
         );
-        Navigator.pushNamed(context, 'dashboard',
-        arguments: {
-          'token': widget.token!,
-          'role': widget.role!,
-          // 'names': names,
-          'phone': widget.phone,
-        },
+
+        // Call uploadImage with the newly created booking ID
+        final bookingId = jsonResponse['booking']['_id']; 
+        print(bookingId);// Assuming the response has the booking ID
+        await _uploadImage(bookingId);
+
+        Navigator.pushNamed(
+          context,
+          'dashboard',
+          arguments: {
+            'token': widget.token!,
+            'role': widget.role!,
+            'phone': widget.phone,
+          },
         );
-      } else{
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Failed to add prop')),
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to add property')),
         );
       }
     } else {
       print('Server responded with status code ${response.statusCode}');
     }
   }
+
+  Future<void> _uploadImage(String bookingId) async {
+    try {
+      final imageBytes = await _propertyImage!.readAsBytes();
+      final imageBase64 = base64Encode(imageBytes);
+
+      final requestBody = {
+        'bookingId': bookingId,
+        'imageBase64': imageBase64,
+      };
+
+      final response = await http.post(
+        Uri.parse('$uploadImage'), // Replace with the correct backend API endpoint for image upload
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode(requestBody),
+      );
+
+      if (response.statusCode == 200) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Image uploaded successfully')),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to upload image')),
+        );
+      }
+    } catch (e) {
+      print('Error uploading image: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error uploading image. Please try again')),
+      );
+    }
+  }
+
   Container _buildPropertyTypeContainer(
       String type, IconData iconData, bool isSelected) {
     return Container(
@@ -260,7 +339,6 @@ class _AddPropertyFormState extends State<AddPropertyForm> {
                         decoration: InputDecoration(
                           labelText: 'Property Locality',
                           border: InputBorder.none,
-                          
                           contentPadding: EdgeInsets.all(10.0),
                         ),
                       ),
@@ -437,6 +515,11 @@ class _AddPropertyFormState extends State<AddPropertyForm> {
                     contentPadding: EdgeInsets.all(10.0),
                   ),
                 ),
+              ),
+              const SizedBox(height: 20.0),
+              ElevatedButton(
+                onPressed: _selectImage,
+                child: Text('Upload Image'),
               ),
               const SizedBox(height: 20.0),
               ElevatedButton(

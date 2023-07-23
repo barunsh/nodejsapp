@@ -11,8 +11,10 @@ const createBooking = async (req, res, next) => {
       propertyType,
       propertyBalconyCount,
       propertyBedroomCount,
+      propertyImage,
       propertyDate,
     } = req.body;
+      
 
     const booking = await BookService.createBook(
       userId,
@@ -22,7 +24,8 @@ const createBooking = async (req, res, next) => {
       propertyType,
       propertyBalconyCount,
       propertyBedroomCount,
-      propertyDate
+      propertyDate,
+      propertyImage,
     );
 
     res.status(201).json({
