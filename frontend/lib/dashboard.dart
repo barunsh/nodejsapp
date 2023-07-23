@@ -5,6 +5,7 @@ import 'login.dart';
 import 'addproperty.dart';
 import 'showproperty.dart';
 import 'deleteandupdate.dart';
+import 'showimage.dart';
 // import 'updatepage.dart';
 
 class Dashboard extends StatefulWidget {
@@ -33,7 +34,7 @@ class _DashboardState extends State<Dashboard> {
   late String id;
   late String email;
   late String names;
-  int? phone;
+  String? phone;
 
   @override
   void initState() {
@@ -42,7 +43,8 @@ class _DashboardState extends State<Dashboard> {
     id = jwtDecodedToken['_id'];
     email = jwtDecodedToken['email'];
     names = jwtDecodedToken['names'];
-    phone = jwtDecodedToken['phone'];
+    phone = jwtDecodedToken['phone'].toString();
+  
     print(jwtDecodedToken);
   }
 
@@ -50,12 +52,12 @@ class _DashboardState extends State<Dashboard> {
   void didUpdateWidget(Dashboard oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.names != oldWidget.names ||
-        widget.phone != oldWidget.phone ||
+        widget.phone.toString() != oldWidget.phone.toString() ||
         widget.id != oldWidget.id ||
         widget.email != oldWidget.email) {
       setState(() {
         names = widget.names!;
-        phone = widget.phone!;
+        phone = widget.phone.toString();
         id = widget.id!;
         email = widget.email!;
       });
@@ -82,6 +84,17 @@ class _DashboardState extends State<Dashboard> {
     );
   }
 
+  void _navigateToShowPhotoForm() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => DisplayImageFromBase64(
+          // token: widget.token,
+          // role: widget.role,
+        ),
+      ),
+    );
+  }
   void _navigateToShowPropertyForm() {
     Navigator.push(
       context,
@@ -103,7 +116,7 @@ class _DashboardState extends State<Dashboard> {
         builder: (context) => DeleteUpdate(
           email: email,
           names: widget.names,
-          phone: widget.phone,
+          phone: widget.phone.toString(),
           id:id,
         ),
       ),
@@ -170,6 +183,10 @@ class _DashboardState extends State<Dashboard> {
         ElevatedButton(
           onPressed: _navigateToUpdateDeleteForm,
           child: Text('Update/Delete User'),
+        ),
+        ElevatedButton(
+          onPressed: _navigateToShowPhotoForm,
+          child: Text('📸'),
         ),
         SizedBox(height: 20),
         _buildLogoutButton(),

@@ -30,8 +30,8 @@ class UserService {
 
   static async updateUser(userId, names, phone, email, role) {
     try {
-      console.log("look:", userId); 
-      console.log(names);
+      console.log("look:", names); 
+      console.log(userId);
       // Assuming updateData is an object with the properties to update
       const updateData = {
         names,

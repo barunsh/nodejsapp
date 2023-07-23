@@ -1,7 +1,6 @@
-const { Types: { ObjectId } } = require('mongoose'); // Import the ObjectID class from mongoose
+const { Types: { ObjectId } } = require('mongoose');
 const UserService = require('../services/user.services');
-// const {ObjectID} = require('mongodb');
-
+const mongoose = require('mongoose');
 
 exports.register = async (req, res, next) => {
   try {
@@ -17,7 +16,7 @@ exports.register = async (req, res, next) => {
 
 exports.getUser = async (req, res, next) => {
   try {
-    const users = await UserService.getUser(); // Call getUser from UserService
+    const users = await UserService.getUser();
     res.status(200).json({ status: true, users });
   } catch (error) {
     next(error);
@@ -26,9 +25,8 @@ exports.getUser = async (req, res, next) => {
 
 exports.login = async (req, res, next) => {
   try {
-    const { email, password } = req.body;
+    const {names,email, password } = req.body;
 
-    // check email from the database
     const user = await UserService.checkuser(email);
 
     if (!user) {
@@ -41,13 +39,12 @@ exports.login = async (req, res, next) => {
       return res.status(400).json({ status: false, message: "Password is invalid. Please try a valid one!" });
     }
 
-    // Retrieve all user details
     const userDetails = {
       names: user.names,
       phone: user.phone,
       // Add other fields you want to retrieve
     };
-    console.log("User details fetched:", userDetails);
+
     let tokenData = {
       _id: user._id,
       email: user.email,
@@ -67,14 +64,17 @@ exports.login = async (req, res, next) => {
 
 exports.updateUser = async (req, res, next) => {
   try {
-    const { userId } = req.params; // Get the user ID from the request parameters
-    const { names, email, role } = req.body; // Get the updated user data from the request body
-    console.log("params", req.params);
-    console.log("reqbody",req.body);
-    console.log("names",names);
+    const { userId } = req.params;
+    const {names,email, role, phone } = req.body;
+    console.log("reqbody", req.params.userId);
+    console.log("reody", req.params);
     
+    
+    // Convert the userId to ObjectId
+    // const userIdObjectId = mongoose.Types.ObjectId(userId);
+
     // Call the updateUser function from UserService
-    const updatedUser = await UserService.updateUser(userId, names, email, role);
+    const updatedUser = await UserService.updateUser(userId, names, email, role, phone);
 
     // Check if the updatedUser is null or undefined (user not found)
     if (!updatedUser) {

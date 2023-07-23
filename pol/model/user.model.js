@@ -15,9 +15,9 @@ const userSchema = new Schema({
     required: true,
   },
   phone: {
-    type: Number,
+    type: String,
     required: true,
-    unique: true,
+    // unique: true,
   },
   email: {
     type: String,

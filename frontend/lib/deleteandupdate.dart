@@ -7,7 +7,7 @@ import 'updatepage.dart';
 class User {
   final int id;
   final String names;
-  final int phone;
+  final String phone;
   final String email;
   final String role;
 
@@ -23,7 +23,7 @@ class User {
     return User(
       id: json['id'] ?? 0,
       names: json['names'] ?? '',
-      phone: json['phone'] ?? 0,
+      phone: json['phone'] ?? '',
       email: json['email'] ?? '',
       role: json['role'] ?? '',
     );
@@ -34,7 +34,7 @@ class DeleteUpdate extends StatefulWidget {
   final String? id;
   final String? names;
   final String? email;
-  final int? phone;
+  final String? phone;
 
   DeleteUpdate({this.id, this.names, this.email, this.phone});
 
@@ -126,7 +126,7 @@ class UserCard extends StatelessWidget {
               style: TextStyle(fontSize: 16),
             ),
             Text(
-              'Phone: ${user.phone}',
+              'Phone: ${user.phone}', // Display phone as String
               style: TextStyle(fontSize: 16),
             ),
             Text(
@@ -149,12 +149,14 @@ class UserCard extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => UpdateUserScreen (id: user.id,
-        names: user.names,
-        phone: user.phone,
-        email: user.email,
-        role: user.role,),
-                      ),                      
+                        builder: (context) => UpdateUserScreen(
+                          id: user.id,
+                          names: user.names,
+                          phone: user.phone,
+                          email: user.email,
+                          role: user.role,
+                        ),
+                      ),
                     );
                   },
                   child: Text('Update User'),

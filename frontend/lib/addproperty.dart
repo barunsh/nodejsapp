@@ -165,7 +165,7 @@ class _AddPropertyFormState extends State<AddPropertyForm> {
 
         // Call uploadImage with the newly created booking ID
         final bookingId = jsonResponse['booking']['_id']; 
-        print(bookingId);// Assuming the response has the booking ID
+        // print(bookingId);// Assuming the response has the booking ID
         await _uploadImage(bookingId);
 
         Navigator.pushNamed(

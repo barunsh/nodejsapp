@@ -8,7 +8,10 @@ router.post('/login', UserController.login);
 router.use('/bookings', BookingsRouter);
 router.get('/getuser' , UserController.getUser);
 // router.put('/updateuser:userId' , UserController.updateUser);
+// router.put('/updateuser/:userId', UserController.updateUser);
+// router.put('/updateuser:userId', UserController.updateUser);
 router.put('/updateuser/:userId', UserController.updateUser);
+
 
 // router.use('/userDetails', UserController.userDetails);
 

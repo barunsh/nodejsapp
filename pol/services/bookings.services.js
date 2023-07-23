@@ -50,6 +50,29 @@ class BookingService {
       throw error;
     }
   }
+
+
+static async uploadImage(bookingId, imageBase64) {
+  try {
+    const booking = await BookingsModel.findById(bookingId);
+
+    if (!booking) {
+      throw new Error('Booking not found');
+    }
+
+    // Update the propertyImage field with the new image data
+    booking.propertyImage = {
+      data: imageBase64,
+      contentType: 'image/jpg', // You can set the appropriate content type here based on the image file type
+    };
+
+    return await booking.save();
+  } catch (error) {
+    throw error;
+  }
 }
+}
+
+
 
 module.exports = BookingService;

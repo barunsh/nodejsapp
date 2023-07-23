@@ -1,10 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class UpdateUserScreen extends StatefulWidget {
   final int id;
   final String names;
-  final int phone;
+  final String phone;
   final String email;
   final String role;
 
@@ -30,7 +32,7 @@ class _UpdateUserScreenState extends State<UpdateUserScreen> {
   void initState() {
     super.initState();
     _namesController.text = widget.names;
-    _phoneController.text = widget.phone.toString();
+    _phoneController.text = widget.phone;
     _emailController.text = widget.email;
     _roleController.text = widget.role;
   }
@@ -57,17 +59,18 @@ class _UpdateUserScreenState extends State<UpdateUserScreen> {
      print('Updating user with ID: ${widget.id}');
 
     // Perform the update API call here
-    final updateUser = 'http://localhost:3000/updateuser${widget.id}'; // Dynamic ID in the API endpoint
+    final updateUser = 'http://localhost:3000/updateuser/${widget.id}'; // Dynamic ID in the API endpoint
     try {
       final response = await http.put(
-        Uri.parse(updateUser),
-        body: {
-          'names': updatedNames,
-          'phone': updatedPhone.toString(),
-          'email': updatedEmail,
-          'role': updatedRole,
-        },
-      );
+  Uri.parse(updateUser),
+  headers: {'Content-Type': 'application/json'}, // Set the Content-Type header
+  body: jsonEncode({
+    'names': updatedNames,
+    'phone' : updatedPhone,
+    'email': updatedEmail,
+    'role': updatedRole,
+  }),
+);
 
       if (response.statusCode == 200) {
         // User updated successfully
