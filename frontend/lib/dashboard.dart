@@ -12,7 +12,7 @@ class Dashboard extends StatefulWidget {
   final String token;
   final String? role;
   final String? names;
-  final int? phone;
+  final String? phone;
   final String? id;
   final String? email;
 
@@ -34,7 +34,7 @@ class _DashboardState extends State<Dashboard> {
   late String id;
   late String email;
   late String names;
-  String? phone;
+  late String phone;
 
   @override
   void initState() {
@@ -43,8 +43,7 @@ class _DashboardState extends State<Dashboard> {
     id = jwtDecodedToken['_id'];
     email = jwtDecodedToken['email'];
     names = jwtDecodedToken['names'];
-    phone = jwtDecodedToken['phone'].toString();
-  
+    phone = jwtDecodedToken['phone']?.toString() ?? ''; 
     print(jwtDecodedToken);
   }
 
@@ -79,6 +78,10 @@ class _DashboardState extends State<Dashboard> {
         builder: (context) => AddPropertyForm(
           token: widget.token,
           role: widget.role,
+          email: email,
+          names: widget.names,
+          phone: widget.phone,
+          id:id,
         ),
       ),
     );
@@ -144,10 +147,12 @@ class _DashboardState extends State<Dashboard> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text(
-          'Welcome Tenant: ${names ?? 'N/A'}',
-          style: TextStyle(fontSize: 18),
-        ),
+        Text('Welcome Tenant: ${names != null ? names : 'N/A'}', style: TextStyle(fontSize: 18)),
+
+        // Text(
+        //   'Welcome Tenant: ${names ?? 'N/A'}',
+        //   style: TextStyle(fontSize: 18),
+        // ),
         SizedBox(height: 20),
         ElevatedButton(
           onPressed: _navigateToAddPropertyForm,
@@ -219,10 +224,11 @@ class _DashboardState extends State<Dashboard> {
               'ID: ${id ?? 'N/A'}',
               style: TextStyle(fontSize: 16),
             ),
-            Text(
-              'Names: ${names ?? 'N/A'}',
-              style: TextStyle(fontSize: 16),
-            ),
+            Text('Names: ${names ?? 'N/A'}', style: TextStyle(fontSize: 16)),
+            // Text(
+            //   'Names: ${names ?? 'N/A'}',
+            //   style: TextStyle(fontSize: 16),
+            // ),
             Text(
               'Phone: ${phone ?? 'N/A'}',
               style: TextStyle(fontSize: 16),

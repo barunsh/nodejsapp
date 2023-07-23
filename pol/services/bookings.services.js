@@ -2,9 +2,10 @@ const BookingsModel = require('../model/bookings.model.js');
 
 class BookingService {
   // Create a new booking
-  static async createBooking(propertyAddress, propertyLocality, propertyRent, propertyType, propertyBalconyCount, propertyBedroomCount, propertyDate, propertyImageBase64, propertyImagePath) {
+  static async createBooking(propertyAddress, propertyLocality, propertyRent, propertyType, propertyBalconyCount, propertyBedroomCount, propertyDate, propertyImageBase64, propertyImagePath, ownerName) {
     try {
       const booking = new BookingsModel({
+        ownerName,
         propertyAddress,
         propertyLocality,
         propertyRent,
@@ -16,6 +17,7 @@ class BookingService {
           data: propertyImageBase64,
           contentType: 'image/jpg',
         },
+        ownerName,
       });
       return await booking.save();
     } catch (error) {

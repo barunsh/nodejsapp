@@ -7,8 +7,8 @@ const userSchema = new Schema({
   id: {
     type: Number,
     required: true,
-    // unique: true,
-    // default: 1, // Set the default value to 1
+    unique: true,
+    default: 1, // Set the default value to 1
   },
   names: {
     type: String,
@@ -17,7 +17,7 @@ const userSchema = new Schema({
   phone: {
     type: String,
     required: true,
-    // unique: true,
+    unique: true,
   },
   email: {
     type: String,

@@ -65,7 +65,7 @@ exports.login = async (req, res, next) => {
 exports.updateUser = async (req, res, next) => {
   try {
     const { userId } = req.params;
-    const {names,email, role, phone } = req.body;
+    const {names,phone, email, role } = req.body;
     console.log("reqbody", req.params.userId);
     console.log("reody", req.params);
     
@@ -74,7 +74,7 @@ exports.updateUser = async (req, res, next) => {
     // const userIdObjectId = mongoose.Types.ObjectId(userId);
 
     // Call the updateUser function from UserService
-    const updatedUser = await UserService.updateUser(userId, names, email, role, phone);
+    const updatedUser = await UserService.updateUser(userId, names, phone, email, role);
 
     // Check if the updatedUser is null or undefined (user not found)
     if (!updatedUser) {

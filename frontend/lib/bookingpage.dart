@@ -9,7 +9,7 @@ class BookingPage extends StatefulWidget {
   final Booking booking;
   final String? names;
   final String? email;
-  final int? phone;
+  final String? phone;
   final String? id;
 
   BookingPage({required this.booking, this.id, this.names, this.email, this.phone});
@@ -84,6 +84,7 @@ class _BookingPageState extends State<BookingPage> {
   void bookProperty() async {
     final Map<String, dynamic> requestBody = {
       'userId': widget.id,
+      'userName': widget.names,
       'propertyAddress': widget.booking.propertyAddress,
       'propertyLocality': widget.booking.propertyLocality,
       'propertyRent': widget.booking.propertyRent,

@@ -4,19 +4,19 @@ import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:http/http.dart' as http;
 import 'booking.dart';
 import 'bookingpage.dart';
-import 'showproperty.dart';
 
 class GetDataPage extends StatefulWidget {
   final String? id;
   final String? names;
   final String? email;
-  final int? phone;
+  final String? phone;
 
-  GetDataPage({this.id, this.names, this.email, this.phone});
+  GetDataPage({required this.id, required this.names,required this.email,required this.phone});
 
   @override
   _GetDataPageState createState() => _GetDataPageState();
 }
+
 
 class _GetDataPageState extends State<GetDataPage> {
   List<Booking> bookings = [];
@@ -156,7 +156,7 @@ class CardList extends StatefulWidget {
   final Booking booking;
   final String? names;
   final String? email;
-  final int? phone;
+  final String? phone;
   final String? id;
 
   CardList({required this.booking, this.id, this.email, this.names, this.phone});

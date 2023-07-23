@@ -5,17 +5,22 @@ import 'package:intl/intl.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'config.dart';
+import 'user.dart';
 
 class AddPropertyForm extends StatefulWidget {
+  final String? id;
+  final String? names;
+  final String? email;
+  final String? phone;
   final String? token;
   final String? role;
-  final int? phone;
 
-  AddPropertyForm({this.token, this.role, this.phone});
+  AddPropertyForm({required this.id, required this.names,required this.email,required this.phone, required this.token, required this.role});
 
   @override
   _AddPropertyFormState createState() => _AddPropertyFormState();
 }
+
 
 final DateFormat formatter = DateFormat('yyyy-MM-dd');
 
@@ -31,6 +36,7 @@ class _AddPropertyFormState extends State<AddPropertyForm> {
   int _selectedBedroom = 1;
   File? _propertyImage;
 
+  
   void _presentDatePicker() {
     showDatePicker(
       context: context,
@@ -82,8 +88,15 @@ class _AddPropertyFormState extends State<AddPropertyForm> {
     final String balconyCount = _selectedBalcony.toString();
     final String bedroomCount = _selectedBedroom.toString();
     final String propertyDate = _selectedDate != null ? formatter.format(_selectedDate!) : '';
-
+  
     String imageBase64 = '';
+
+    if (widget.names == null || widget.names!.isEmpty) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Owner name is missing or empty')),
+    );
+    return;
+  }
     if (_propertyImage != null) {
       try {
         List<int> imageBytes = await _propertyImage!.readAsBytes();
@@ -96,6 +109,22 @@ class _AddPropertyFormState extends State<AddPropertyForm> {
         return;
       }
     }
+
+    if (widget.names!.isEmpty) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Owner name is missing or empty')),
+    );
+    return;
+  }
+    
+    
+    
+    if (widget.names == null || widget.names!.isEmpty) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Owner name is missing or empty')),
+    );
+    return;
+  }
 
     if (propertyAddress.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -131,8 +160,9 @@ class _AddPropertyFormState extends State<AddPropertyForm> {
       return;
     }
 
-    final Map<String, String> requestBody = {
+    final Map<String, dynamic> requestBody = {
       'propertyAddress': propertyAddress,
+      'ownerName': widget.names,
       'propertyLocality': propertyLocality,
       'propertyRent': propertyRent,
       'bookingRemaining': bookingRemaining,
@@ -142,6 +172,7 @@ class _AddPropertyFormState extends State<AddPropertyForm> {
       'propertyDate': propertyDate,
       'propertyImageBase64': imageBase64,
     };
+
 
     final response = await http.post(
       Uri.parse('$createBooking'),
@@ -223,6 +254,7 @@ class _AddPropertyFormState extends State<AddPropertyForm> {
   Container _buildPropertyTypeContainer(
       String type, IconData iconData, bool isSelected) {
     return Container(
+      
       padding: EdgeInsets.all(10.0),
       decoration: BoxDecoration(
         border: Border.all(
@@ -246,6 +278,10 @@ class _AddPropertyFormState extends State<AddPropertyForm> {
               fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
             ),
           ),
+          Text(
+                  'Names: ${widget.names ?? 'N/A'}',
+                  style: TextStyle(fontSize: 10),
+                ),
         ],
       ),
     );

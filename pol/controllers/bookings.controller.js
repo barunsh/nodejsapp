@@ -20,11 +20,10 @@ exports.createBooking = async (req, res, next) => {
       propertyBedroomCount,
       propertyDate,
       propertyImageBase64,
+      ownerName,
     } = req.body;
-    // console.log("CHECK MEEEE",req.body);
+    console.log("CHECK MEEEE",req.body);
 
-    // Note: req.file will be undefined here as we are not uploading an image in createBooking.
-    // const { path, originalname } = req.file || {};
 
     const booking = await BookingService.createBooking(
       propertyAddress,
@@ -34,11 +33,12 @@ exports.createBooking = async (req, res, next) => {
       propertyBalconyCount,
       propertyBedroomCount,
       propertyDate,
-      propertyImageBase64
+      propertyImageBase64,
+      ownerName,
       // Remove "path" from the parameters as it's not used here.
     );
 
-    res.status(201).json({ status: true, success: "Booking created successfully", booking });
+    res.status(201).json({ status: true, success: "Property added  successfully", booking });
   } catch (error) {
     next(error);
   }

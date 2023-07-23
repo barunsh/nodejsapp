@@ -59,7 +59,7 @@ class MyApp extends StatelessWidget {
     token: token!,
     role: role!,
     names: names,
-    phone: phone,
+     phone: phone != null ? phone.toString() : null,
     id: id,
     email: email,
   ),

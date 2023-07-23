@@ -59,7 +59,9 @@ class _UpdateUserScreenState extends State<UpdateUserScreen> {
      print('Updating user with ID: ${widget.id}');
 
     // Perform the update API call here
-    final updateUser = 'http://localhost:3000/updateuser/${widget.id}'; // Dynamic ID in the API endpoint
+    // final updateUser = 'http://localhost:3000/updateuser/${widget.id.toString()}';
+    final updateUser = 'http://localhost:3000/updateuser/${widget.id}';
+     // Dynamic ID in the API endpoint
     try {
       final response = await http.put(
   Uri.parse(updateUser),

@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
-// ... (Counter schema and Counter model code remains unchanged)
 
 const bookingsSchema = new mongoose.Schema({
   id: { type: Number, unique: true },
@@ -18,6 +17,7 @@ const bookingsSchema = new mongoose.Schema({
   },
   bookingRemaining: { type: Number, default: 3 },
   ownerId: { type: Schema.Types.ObjectId, ref: 'User' },
+  ownerName: {type: String},
 });
 
 // Middleware to auto-increment the ID before saving (remains unchanged)

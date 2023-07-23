@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="JAVA_MODULE" version="4">
+  <component name="NewModuleRootManager" inherit-compiler-output="true">
+    <exclude-output />
+    <content url="file://$MODULE_DIR$">
+      <excludeFolder url="file://$MODULE_DIR$/frontend/ios/.symlinks/plugins/path_provider_foundation/example/build" />
+      <excludeFolder url="file://$MODULE_DIR$/frontend/ios/.symlinks/plugins/path_provider_foundation/example/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/frontend/ios/.symlinks/plugins/path_provider_foundation/example/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/frontend/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/frontend/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/frontend/build" />
+      <excludeFolder url="file://$MODULE_DIR$/frontend/ios/.symlinks/plugins/path_provider_foundation/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/frontend/ios/.symlinks/plugins/path_provider_foundation/build" />
+      <excludeFolder url="file://$MODULE_DIR$/frontend/ios/.symlinks/plugins/path_provider_foundation/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/frontend/ios/.symlinks/plugins/image_picker_ios/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/frontend/ios/.symlinks/plugins/image_picker_ios/build" />
+      <excludeFolder url="file://$MODULE_DIR$/frontend/ios/.symlinks/plugins/image_picker_ios/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/frontend/ios/.symlinks/plugins/shared_preferences_foundation/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/frontend/ios/.symlinks/plugins/shared_preferences_foundation/build" />
+      <excludeFolder url="file://$MODULE_DIR$/frontend/ios/.symlinks/plugins/shared_preferences_foundation/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/frontend/ios/.symlinks/plugins/image_picker_ios/example/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/frontend/ios/.symlinks/plugins/image_picker_ios/example/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/frontend/ios/.symlinks/plugins/image_picker_ios/example/build" />
+      <excludeFolder url="file://$MODULE_DIR$/frontend/ios/build" />
+      <excludeFolder url="file://$MODULE_DIR$/frontend/ios/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/frontend/ios/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/frontend/ios/.symlinks/plugins/flutter_keyboard_visibility/example/build" />
+      <excludeFolder url="file://$MODULE_DIR$/frontend/ios/.symlinks/plugins/flutter_keyboard_visibility/example/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/frontend/ios/.symlinks/plugins/flutter_keyboard_visibility/example/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/frontend/ios/.symlinks/plugins/multi_image_picker/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/frontend/ios/.symlinks/plugins/multi_image_picker/build" />
+      <excludeFolder url="file://$MODULE_DIR$/frontend/ios/.symlinks/plugins/multi_image_picker/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/frontend/ios/.symlinks/plugins/flutter_keyboard_visibility/build" />
+      <excludeFolder url="file://$MODULE_DIR$/frontend/ios/.symlinks/plugins/flutter_keyboard_visibility/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/frontend/ios/.symlinks/plugins/flutter_keyboard_visibility/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/frontend/ios/.symlinks/plugins/shared_preferences_foundation/example/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/frontend/ios/.symlinks/plugins/shared_preferences_foundation/example/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/frontend/ios/.symlinks/plugins/shared_preferences_foundation/example/build" />
+      <excludeFolder url="file://$MODULE_DIR$/frontend/ios/.symlinks/plugins/multi_image_picker/example/build" />
+      <excludeFolder url="file://$MODULE_DIR$/frontend/ios/.symlinks/plugins/multi_image_picker/example/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/frontend/ios/.symlinks/plugins/multi_image_picker/example/.pub" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+  </component>
+</module>
