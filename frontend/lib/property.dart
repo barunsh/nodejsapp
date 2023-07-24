@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 class Property {
   final String propertyAddress;
   final String ownerName;
@@ -39,7 +41,9 @@ class Property {
       propertyType: json['propertyType'] ?? '',
       propertyBalconyCount: json['propertyBalconyCount'] ?? 0,
       propertyBedroomCount: json['propertyBedroomCount'] ?? 0,
-      propertyDate: json['propertyDate'] != null ? DateTime.parse(json['propertyDate']) : DateTime.now(),
+      propertyDate: json['propertyDate'] != null
+          ? DateFormat('yyyy-MM-dd').parse(json['propertyDate'])
+          : DateTime.now(),
       bookingRemaining: json['bookingRemaining'] ?? 0,
       email: json['email'],
       phone: json['phone'],

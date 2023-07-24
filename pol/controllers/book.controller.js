@@ -1,5 +1,5 @@
 const BookService = require('../services/book.services.js');
-
+const Property = require ('../model/property.model.js');
 // Create a new booking
 const createBook = async (req, res, next) => {
   try {
@@ -15,6 +15,8 @@ const createBook = async (req, res, next) => {
       propertyImage,
       propertyDate,
     } = req.body;
+
+    const formattedPropertyDate = new Date(propertyDate);
       
 
     const booking = await BookService.createBook(
@@ -26,9 +28,28 @@ const createBook = async (req, res, next) => {
       propertyType,
       propertyBalconyCount,
       propertyBedroomCount,
-      propertyDate,
+      propertyImage,
+      formattedPropertyDate,
       // propertyImage,
     );
+    
+    // const property = await Property.findById(booking.propertyId);
+
+    // if (!property) {
+    //   return res.status(404).json({ status: false, message: 'Property not found' });
+    // }
+
+    // // Check if the property is available for booking
+    // if (property.bookingRemaining <= 0) {
+    //   return res.status(400).json({ status: false, message: 'Booking full' });
+    // }
+
+    // // Decrease the bookingRemaining count by 1
+    // property.bookingRemaining -= 1;
+
+    // // Save the updated property to the database
+    // await property.save();
+
 
     res.status(201).json({
       status: true,

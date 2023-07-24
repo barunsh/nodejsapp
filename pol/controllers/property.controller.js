@@ -1,12 +1,5 @@
 const PropertyService = require('../services/property.services.js');
-const multer = require('multer');
-const fs = require('fs');
-const PropertyModel = require('../model/property.model.js');
-
-// Multer configuration for image uploads
-const upload = multer({
-  dest: 'uploads/', // Set the destination folder where files will be stored
-});
+const upload = require('../middleware/multer.js'); // Import the multer middleware
 
 // Create a new property
 exports.createProperty = async (req, res, next) => {
@@ -24,7 +17,6 @@ exports.createProperty = async (req, res, next) => {
       propertyImageBase64,
     } = req.body;
     console.log("CHECK MEEEE",req.body);
-
 
     const property = await PropertyService.createProperty(
       propertyAddress,
@@ -110,6 +102,7 @@ exports.getImageCount = () => {
 exports.incrementImageCount = () => {
   imageCount++;
 };
+
 // Upload an image
 exports.uploadImage = async (req, res, next) => {
   try {
@@ -133,6 +126,8 @@ exports.uploadImage = async (req, res, next) => {
     imageCount++;
 
     // You can perform any other image-related operations here, if needed.
+
+    console.log('Image uploaded successfully');
 
     res.status(200).json({ status: true, message: 'Image uploaded successfully' });
   } catch (error) {

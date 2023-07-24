@@ -23,7 +23,8 @@ class AddPropertyForm extends StatefulWidget {
 }
 
 
-final DateFormat formatter = DateFormat('yyyy-MM-dd');
+// final DateFormat formatter = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+
 
 class _AddPropertyFormState extends State<AddPropertyForm> {
   TextEditingController _propertyAddressController = TextEditingController();
@@ -80,6 +81,10 @@ class _AddPropertyFormState extends State<AddPropertyForm> {
     }
   }
 
+  String formatDateTime(DateTime dateTime) {
+  return "${dateTime.year.toString().padLeft(4, '0')}-${dateTime.month.toString().padLeft(2, '0')}-${dateTime.day.toString().padLeft(2, '0')}T00:00:00.000+00:00";
+}
+
   void _submitForm() async {
     final String propertyAddress = _propertyAddressController.text;
     final String propertyLocality = _propertyLocalityController.text;
@@ -88,7 +93,9 @@ class _AddPropertyFormState extends State<AddPropertyForm> {
     final String propertyType = _selectedPropertyType;
     final String balconyCount = _selectedBalcony.toString();
     final String bedroomCount = _selectedBedroom.toString();
-    final String propertyDate = _selectedDate != null ? formatter.format(_selectedDate!) : '';
+    final String propertyDate =
+      _selectedDate != null ? formatDateTime(_selectedDate!) : '';
+
   
     String imageBase64 = '';
 
@@ -161,6 +168,7 @@ class _AddPropertyFormState extends State<AddPropertyForm> {
       return;
     }
     print(widget.names);
+    print('Image Base64: $imageBase64');
     final Map<String, dynamic> requestBody = {
       'propertyAddress': propertyAddress,
       'ownerId': widget.id,
@@ -222,37 +230,41 @@ class _AddPropertyFormState extends State<AddPropertyForm> {
   }
 
   Future<void> _uploadImage(String propertyId) async {
-    try {
-      final imageBytes = await _propertyImage!.readAsBytes();
-      final imageBase64 = base64Encode(imageBytes);
+  try {
+    final imageBytes = await _propertyImage!.readAsBytes();
+    final imageBase64 = base64Encode(imageBytes);
 
-      final requestBody = {
-        'propertyId': propertyId,
-        'imageBase64': imageBase64,
-      };
+    final requestBody = {
+      'propertyId': propertyId,
+      'imageBase64': imageBase64,
+    };
 
-      final response = await http.post(
-        Uri.parse('$uploadImage'), // Replace with the correct backend API endpoint for image upload
-        headers: {"Content-Type": "application/json"},
-        body: jsonEncode(requestBody),
-      );
+    final response = await http.post(
+      Uri.parse('$uploadImage'), // Replace with the correct backend API endpoint for image upload
+      headers: {"Content-Type": "application/json"},
+      body: jsonEncode(requestBody),
+    );
 
-      if (response.statusCode == 200) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Image uploaded successfully')),
-        );
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to upload image')),
-        );
-      }
-    } catch (e) {
-      print('Error uploading image: $e');
+    print('Response status: ${response.statusCode}');
+    print('Response body: ${response.body}');
+
+    if (response.statusCode == 200) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error uploading image. Please try again')),
+        SnackBar(content: Text('Image uploaded successfully')),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to upload image')),
       );
     }
+  } catch (e) {
+    print('Error uploading image: $e');
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Error uploading image. Please try again')),
+    );
   }
+}
+
 
   Container _buildPropertyTypeContainer(
       String type, IconData iconData, bool isSelected) {
@@ -517,7 +529,7 @@ class _AddPropertyFormState extends State<AddPropertyForm> {
                   Text(
                     _selectedDate == null
                         ? 'No Date Selected'
-                        : formatter.format(_selectedDate!),
+                        : formatDateTime(_selectedDate!),
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.bold,

@@ -51,7 +51,7 @@ class _BookingDetailsState extends State<BookingDetails> {
             SizedBox(height: 8),
             Text('Property Bedroom Count: ${widget.property.propertyBedroomCount}'),
             SizedBox(height: 8),
-            Text('Property Date: ${widget.property.propertyDate.toString()}'),
+            // Text('Property Date: ${widget.property.propertyDate}'),
           ],
         ),
       ),

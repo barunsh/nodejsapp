@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'property.dart';
 import 'showproperty.dart';
 import 'config.dart';
+import 'package:intl/intl.dart';
 
 class BookingPage extends StatefulWidget {
   final Property property;
@@ -80,7 +81,6 @@ class _BookingPageState extends State<BookingPage> {
       ),
     );
   }
-
   void bookProperty() async {
     final Map<String, dynamic> requestBody = {
       'userId': widget.id,
@@ -91,7 +91,7 @@ class _BookingPageState extends State<BookingPage> {
       'propertyType': widget.property.propertyType,
       'propertyBalconyCount': widget.property.propertyBalconyCount,
       'propertyBedroomCount': widget.property.propertyBedroomCount,
-      'propertyDate': widget.property.propertyDate.toString(),
+      'propertyDate': DateFormat('yyyy-MM-dd').format(widget.property.propertyDate),
     };
 
     final response = await http.post(
