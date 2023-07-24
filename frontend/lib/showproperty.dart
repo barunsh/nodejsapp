@@ -2,8 +2,10 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:http/http.dart' as http;
+import 'getdetails.dart';
 import 'property.dart';
 import 'bookingpage.dart';
+// import 'getdetails.dart';
 
 class GetDataPage extends StatefulWidget {
   final String? id;

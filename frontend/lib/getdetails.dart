@@ -6,8 +6,12 @@ import 'config.dart';
 
 class BookingDetails extends StatefulWidget {
   final Property property;
+  final String? names;
+  final String? email;
+  final String? phone;
+  final String? id;
 
-  const BookingDetails({required this.property});
+  const BookingDetails({required this.property, this.names,  this.email,  this.phone,  this.id});
 
   @override
   _BookingDetailsState createState() => _BookingDetailsState();

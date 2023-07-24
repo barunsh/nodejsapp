@@ -5,6 +5,7 @@ const { Schema } = mongoose;
 const propertySchema = new mongoose.Schema({
   propertyAddress: { type: String, required: true },
   ownerName: {type: String},
+  ownerId: {type: String},
   propertyLocality: { type: String, required: true },
   propertyRent: { type: Number, required: true },
   propertyType: { type: String, required: true },

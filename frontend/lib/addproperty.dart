@@ -163,6 +163,7 @@ class _AddPropertyFormState extends State<AddPropertyForm> {
     print(widget.names);
     final Map<String, dynamic> requestBody = {
       'propertyAddress': propertyAddress,
+      'ownerId': widget.id,
       'ownerName': widget.names,
       'propertyLocality': propertyLocality,
       'propertyRent': propertyRent,
@@ -531,29 +532,29 @@ class _AddPropertyFormState extends State<AddPropertyForm> {
                   ),
                 ],
               ),
-              Text(
-                'Booking Remaining',
-                style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 10.0),
-              Container(
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: Colors.grey,
-                    width: 1.0,
-                  ),
-                  borderRadius: BorderRadius.circular(5.0),
-                ),
-                child: TextField(
-                  controller: _bookingRemainingController,
-                  keyboardType: TextInputType.number,
-                  decoration: InputDecoration(
-                    labelText: 'Booking Remaining',
-                    border: InputBorder.none,
-                    contentPadding: EdgeInsets.all(10.0),
-                  ),
-                ),
-              ),
+              // Text(
+              //   'Booking Remaining',
+              //   style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+              // ),
+              // const SizedBox(height: 10.0),
+              // Container(
+              //   decoration: BoxDecoration(
+              //     border: Border.all(
+              //       color: Colors.grey,
+              //       width: 1.0,
+              //     ),
+              //     borderRadius: BorderRadius.circular(5.0),
+              //   ),
+              //   child: TextField(
+              //     controller: _bookingRemainingController,
+              //     keyboardType: TextInputType.number,
+              //     decoration: InputDecoration(
+              //       labelText: 'Booking Remaining',
+              //       border: InputBorder.none,
+              //       contentPadding: EdgeInsets.all(10.0),
+              //     ),
+              //   ),
+              // ),
               const SizedBox(height: 20.0),
               ElevatedButton(
                 onPressed: _selectImage,

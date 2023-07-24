@@ -14,6 +14,7 @@ exports.createProperty = async (req, res, next) => {
     const {
       propertyAddress,
       ownerName,
+      ownerId,
       propertyLocality,
       propertyRent,
       propertyType,
@@ -28,6 +29,7 @@ exports.createProperty = async (req, res, next) => {
     const property = await PropertyService.createProperty(
       propertyAddress,
       ownerName,
+      ownerId,
       propertyLocality,
       propertyRent,
       propertyType,

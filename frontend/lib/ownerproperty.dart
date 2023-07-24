@@ -2,8 +2,10 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:http/http.dart' as http;
+import 'getdetails.dart';
 import 'property.dart';
 import 'bookingpage.dart';
+// import 'getdetails.dart';
 
 class MyProperties extends StatefulWidget {
   final String? id;
@@ -13,13 +15,18 @@ class MyProperties extends StatefulWidget {
   final String? token;
   final String? role;
 
-  MyProperties({required this.id, required this.names,required this.email,required this.phone,required this.token,
-    required this.role,});
+  MyProperties({
+    required this.id,
+    required this.names,
+    required this.email,
+    required this.phone,
+    required this.token,
+    required this.role,
+  });
 
   @override
   _MyPropertiesState createState() => _MyPropertiesState();
 }
-
 
 class _MyPropertiesState extends State<MyProperties> {
   List<Property> properties = [];
@@ -33,46 +40,34 @@ class _MyPropertiesState extends State<MyProperties> {
   }
 
   Future<void> fetchData() async {
-  setState(() {
-    isLoading = true;
-  });
-
-  try {
-    final response = await http.get(
-      Uri.parse('http://localhost:3000/getProperty'),
-      headers: {"Authorization": "Bearer ${widget.id}"}, // Send the user ID as a bearer token in the header
-    );
-
-    if (response.statusCode == 200) {
-      final jsonData = jsonDecode(response.body);
-      if (jsonData['status'] == true && jsonData['property'] is List) {
-        final List<Property> allProperties = (jsonData['property'] as List<dynamic>)
-            .map((item) => Property.fromJson(item))
-            .toList();
-
-        // Filter properties based on role and user ID
-        // final List<Property> filteredProperties = allProperties.where((property) {
-        //   return this
-        // }).toList();
-
-        setState(() {
-          // properties = filteredProperties;
-        });
-      } else {
-        print('Invalid response format or no property data');
-      }
-    } else {
-      print('Failed to fetch data: ${response.reasonPhrase}');
-    }
-  } catch (error) {
-    print('Error: $error');
-  } finally {
     setState(() {
-      isLoading = false;
+      isLoading = true;
     });
-  }
-}
 
+    try {
+      final response = await http.get(Uri.parse('http://localhost:3000/getProperty'));
+      if (response.statusCode == 200) {
+        final jsonData = jsonDecode(response.body);
+        if (jsonData['status'] == true && jsonData['property'] is List) {
+          setState(() {
+            properties = (jsonData['property'] as List<dynamic>)
+                .map((item) => Property.fromJson(item))
+                .toList();
+          });
+        } else {
+          print('Invalid response format or no property data');
+        }
+      } else {
+        print('Failed to fetch data: ${response.reasonPhrase}');
+      }
+    } catch (error) {
+      print('Error: $error');
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
 
   List<String> searchProperties(String pattern) {
     return properties
@@ -87,7 +82,7 @@ class _MyPropertiesState extends State<MyProperties> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('🏚️All Properties'),
+        title: Text('My Properties'),
       ),
       body: isLoading
           ? Center(
@@ -110,7 +105,7 @@ class _MyPropertiesState extends State<MyProperties> {
                 Text(
                   'Phone: ${widget.phone ?? 'N/A'}',
                   style: TextStyle(fontSize: 16),
-                ), 
+                ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: TypeAheadField<String>(
@@ -142,24 +137,37 @@ class _MyPropertiesState extends State<MyProperties> {
                 ),
                 Expanded(
                   child: ListView.builder(
-                    itemCount: properties.length,
-                    itemBuilder: (context, index) {
-                      final property = properties[index];
-                      final searchPattern = searchController.text.toLowerCase();
-                      if (searchPattern.isNotEmpty &&
-                          !property.propertyAddress.toLowerCase().contains(searchPattern) &&
-                          !property.propertyLocality.toLowerCase().contains(searchPattern)) {
-                        return Container();
-                      }
-                      return CardList(
-                        id: widget.id,
-                        property: property,
-                        names: widget.names,
-                        email: widget.email,
-                        phone: widget.phone,
-                      );
-                    },
-                  ),
+  itemCount: properties.length,
+  itemBuilder: (context, index) {
+    final property = properties[index];
+    final searchPattern = searchController.text.toLowerCase();
+    bool isOwnerProperty = property.ownerId == widget.id;
+
+    if (searchPattern.isNotEmpty && !isOwnerProperty) {
+      return Container();
+    }
+
+    if (searchPattern.isNotEmpty &&
+        !property.propertyAddress.toLowerCase().contains(searchPattern) &&
+        !property.propertyLocality.toLowerCase().contains(searchPattern)) {
+      return Container();
+    }
+
+    // Only show the CardList if it's the owner's property
+    if (!isOwnerProperty) {
+      return Container();
+    }
+
+    return CardList(
+      id: widget.id,
+      property: property,
+      names: widget.names,
+      email: widget.email,
+      phone: widget.phone,
+    );
+  },
+),
+
                 ),
               ],
             ),
@@ -211,10 +219,11 @@ class _CardListState extends State<CardList> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               ListTile(
-                title: Text(widget.property.propertyAddress),
+                title: Text(widget.property.ownerName),
                 subtitle: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    Text('Owner Id: ${widget.property.ownerId}'),
                     Text('Price: Rs. ${widget.property.propertyRent}'),
                     Text('Address: ${widget.property.propertyLocality}'),
                   ],

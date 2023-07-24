@@ -1,21 +1,22 @@
 class Property {
   final String propertyAddress;
   final String ownerName;
+  final String ownerId;
   final String propertyLocality;
-  final String propertyRent;
+  int propertyRent;
   final String propertyType;
   final int propertyBalconyCount;
   final int propertyBedroomCount;
   final DateTime propertyDate;
-  final String prop;
   int bookingRemaining;
   String? email;
-  int? phone;
+  String? phone;
   String? names; // Change from final to regular instance variable
 
   Property({
     required this.propertyAddress,
     required this.ownerName,
+    required this.ownerId,
     required this.propertyLocality,
     required this.propertyRent,
     required this.propertyType,
@@ -23,7 +24,6 @@ class Property {
     required this.propertyBedroomCount,
     required this.propertyDate,
     required this.bookingRemaining,
-    required this.prop,
     this.email,
     this.phone,
     this.names,
@@ -33,6 +33,7 @@ class Property {
     return Property(
       propertyAddress: json['propertyAddress'] ?? '',
       ownerName: json['ownerName'] ?? '',
+      ownerId: json['ownerId'] ?? '',
       propertyLocality: json['propertyLocality'] ?? '',
       propertyRent: json['propertyRent'] ?? 0,
       propertyType: json['propertyType'] ?? '',
@@ -43,7 +44,6 @@ class Property {
       email: json['email'],
       phone: json['phone'],
       names: json['names'],
-      prop: json['prop'] ?? '',
     );
   }
 }
