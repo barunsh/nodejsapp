@@ -2,10 +2,11 @@ const PropertyModel = require('../model/property.model.js');
 
 class PropertyService {
   // Create a new property
-  static async createProperty(propertyAddress, propertyLocality, propertyRent, propertyType, propertyBalconyCount, propertyBedroomCount, propertyDate, propertyImageBase64, propertyImagePath, ownerName) {
+  static async createProperty(propertyAddress,ownerName, propertyLocality, propertyRent, propertyType, propertyBalconyCount, propertyBedroomCount, propertyDate, propertyImageBase64, propertyImagePath) {
     try {
       const property = new PropertyModel({
         propertyAddress,
+        ownerName,
         propertyLocality,
         propertyRent,
         propertyType,
@@ -16,7 +17,6 @@ class PropertyService {
           data: propertyImageBase64,
           contentType: 'image/jpg',
         },
-        ownerName,
       });
       return await property.save();
     } catch (error) {

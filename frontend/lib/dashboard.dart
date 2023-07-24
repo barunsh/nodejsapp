@@ -6,6 +6,7 @@ import 'addproperty.dart';
 import 'showproperty.dart';
 import 'deleteandupdate.dart';
 import 'showimage.dart';
+import 'ownerproperty.dart';
 // import 'updatepage.dart';
 
 class Dashboard extends StatefulWidget {
@@ -87,6 +88,23 @@ class _DashboardState extends State<Dashboard> {
     );
   }
 
+
+  void _navigateToMyProperties() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => MyProperties(
+          token: widget.token,
+          role: widget.role,
+          email: email,
+          names: widget.names,
+          phone: widget.phone,
+          id:id,
+        ),
+      ),
+    );
+  }
+  
   void _navigateToShowPhotoForm() {
     Navigator.push(
       context,
@@ -177,6 +195,10 @@ class _DashboardState extends State<Dashboard> {
           style: TextStyle(fontSize: 18),
         ),
         SizedBox(height: 20),
+        ElevatedButton(
+          onPressed: _navigateToMyProperties,
+          child: Text('My Properties'),
+        ),
         ElevatedButton(
           onPressed: _navigateToAddPropertyForm,
           child: Text('Add Property'),

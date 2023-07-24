@@ -4,6 +4,7 @@ const { Schema } = mongoose;
 
 const propertySchema = new mongoose.Schema({
   propertyAddress: { type: String, required: true },
+  ownerName: {type: String},
   propertyLocality: { type: String, required: true },
   propertyRent: { type: Number, required: true },
   propertyType: { type: String, required: true },
@@ -15,7 +16,6 @@ const propertySchema = new mongoose.Schema({
     contentType: String
   },
   bookingRemaining: { type: Number, default: 3 },
-  ownerName: {type: String},
 });
 
 // Middleware to auto-increment the ID before saving (remains unchanged)

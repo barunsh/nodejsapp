@@ -160,14 +160,14 @@ class _AddPropertyFormState extends State<AddPropertyForm> {
       );
       return;
     }
-
+    print(widget.names);
     final Map<String, dynamic> requestBody = {
       'propertyAddress': propertyAddress,
       'ownerName': widget.names,
       'propertyLocality': propertyLocality,
       'propertyRent': propertyRent,
-      'bookingRemaining': bookingRemaining,
       'propertyType': propertyType,
+      'bookingRemaining': bookingRemaining,
       'propertyBalconyCount': balconyCount,
       'propertyBedroomCount': bedroomCount,
       'propertyDate': propertyDate,

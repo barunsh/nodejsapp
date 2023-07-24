@@ -5,20 +5,23 @@ import 'package:http/http.dart' as http;
 import 'property.dart';
 import 'bookingpage.dart';
 
-class GetDataPage extends StatefulWidget {
+class MyProperties extends StatefulWidget {
   final String? id;
   final String? names;
   final String? email;
   final String? phone;
+  final String? token;
+  final String? role;
 
-  GetDataPage({required this.id, required this.names,required this.email,required this.phone});
+  MyProperties({required this.id, required this.names,required this.email,required this.phone,required this.token,
+    required this.role,});
 
   @override
-  _GetDataPageState createState() => _GetDataPageState();
+  _MyPropertiesState createState() => _MyPropertiesState();
 }
 
 
-class _GetDataPageState extends State<GetDataPage> {
+class _MyPropertiesState extends State<MyProperties> {
   List<Property> properties = [];
   bool isLoading = true;
   TextEditingController searchController = TextEditingController();
@@ -30,34 +33,46 @@ class _GetDataPageState extends State<GetDataPage> {
   }
 
   Future<void> fetchData() async {
-    setState(() {
-      isLoading = true;
-    });
+  setState(() {
+    isLoading = true;
+  });
 
-    try {
-      final response = await http.get(Uri.parse('http://localhost:3000/getProperty'));
-      if (response.statusCode == 200) {
-        final jsonData = jsonDecode(response.body);
-        if (jsonData['status'] == true && jsonData['property'] is List) {
-          setState(() {
-            properties = (jsonData['property'] as List<dynamic>)
-                .map((item) => Property.fromJson(item))
-                .toList();
-          });
-        } else {
-          print('Invalid response format or no property data');
-        }
+  try {
+    final response = await http.get(
+      Uri.parse('http://localhost:3000/getProperty'),
+      headers: {"Authorization": "Bearer ${widget.id}"}, // Send the user ID as a bearer token in the header
+    );
+
+    if (response.statusCode == 200) {
+      final jsonData = jsonDecode(response.body);
+      if (jsonData['status'] == true && jsonData['property'] is List) {
+        final List<Property> allProperties = (jsonData['property'] as List<dynamic>)
+            .map((item) => Property.fromJson(item))
+            .toList();
+
+        // Filter properties based on role and user ID
+        // final List<Property> filteredProperties = allProperties.where((property) {
+        //   return this
+        // }).toList();
+
+        setState(() {
+          // properties = filteredProperties;
+        });
       } else {
-        print('Failed to fetch data: ${response.reasonPhrase}');
+        print('Invalid response format or no property data');
       }
-    } catch (error) {
-      print('Error: $error');
-    } finally {
-      setState(() {
-        isLoading = false;
-      });
+    } else {
+      print('Failed to fetch data: ${response.reasonPhrase}');
     }
+  } catch (error) {
+    print('Error: $error');
+  } finally {
+    setState(() {
+      isLoading = false;
+    });
   }
+}
+
 
   List<String> searchProperties(String pattern) {
     return properties
@@ -196,7 +211,7 @@ class _CardListState extends State<CardList> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               ListTile(
-                title: Text(widget.property.ownerName),
+                title: Text(widget.property.propertyAddress),
                 subtitle: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [

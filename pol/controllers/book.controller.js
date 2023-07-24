@@ -12,7 +12,7 @@ const createBook = async (req, res, next) => {
       propertyType,
       propertyBalconyCount,
       propertyBedroomCount,
-      // propertyImage,
+      propertyImage,
       propertyDate,
     } = req.body;
       

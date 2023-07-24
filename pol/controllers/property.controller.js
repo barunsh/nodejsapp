@@ -13,6 +13,7 @@ exports.createProperty = async (req, res, next) => {
   try {
     const {
       propertyAddress,
+      ownerName,
       propertyLocality,
       propertyRent,
       propertyType,
@@ -20,13 +21,13 @@ exports.createProperty = async (req, res, next) => {
       propertyBedroomCount,
       propertyDate,
       propertyImageBase64,
-      ownerName,
     } = req.body;
     console.log("CHECK MEEEE",req.body);
 
 
     const property = await PropertyService.createProperty(
       propertyAddress,
+      ownerName,
       propertyLocality,
       propertyRent,
       propertyType,
@@ -34,7 +35,6 @@ exports.createProperty = async (req, res, next) => {
       propertyBedroomCount,
       propertyDate,
       propertyImageBase64,
-      ownerName,
       // Remove "path" from the parameters as it's not used here.
     );
 

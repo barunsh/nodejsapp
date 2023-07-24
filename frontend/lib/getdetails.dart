@@ -33,6 +33,8 @@ class _BookingDetailsState extends State<BookingDetails> {
               ),
             ),
             SizedBox(height: 8),
+            Text('Owner Name: ${widget.property.ownerName}'),
+            SizedBox(height: 8),
             Text('Property Address: ${widget.property.propertyAddress}'),
             SizedBox(height: 8),
             Text('Property Address: ${widget.property.propertyAddress}'),
