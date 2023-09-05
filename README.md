@@ -1,1 +1,3 @@
-# nodejsapp
+# Rentpasa:
+
+RentPasa is a comprehensive rental management system designed for streamlining apartment bookings, featuring rooms with amenities such as balconies and terraces. It offers an intuitive interface that enables property owners to efficiently manage tenant accounts, oversee system activities, and generate insightful reports on property performance. Moreover, potential tenants benefit from advanced search filters, including price and preferred BHK levels. The system also prioritizes seamless communication between tenants and property owners, and simplifies the rent collection process. Integrated external services further enhance the system's versatility, ensuring a holistic property management experience.
